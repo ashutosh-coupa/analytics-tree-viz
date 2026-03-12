@@ -1,0 +1,2751 @@
+{
+  "Analytics": [
+    {
+      "explore": "invoices",
+      "description": "Invoice lifecycle analytics — count/search, approval status, spend, supplier spend, PO-backing, contract spend, commodities, channel/electronic, cycle time. Most-queried explore (79 golden queries).",
+      "primary_view": "invoices",
+      "example_queries": [
+        "how many invoices were created this month",
+        "how many invoices are on pending approval status",
+        "who are the top 10 suppliers by spend in the last year?",
+        "what percentage of invoices are electronic?",
+        "how much of our spend is po-backed vs non-po-backed?",
+        "give me a list of contracts with the highest spend over the last year",
+        "what are the top 10 commodities by contract spend?",
+        "how has invoice spend changed by quarter?",
+        "what's the average invoice cycle time by account?"
+      ],
+      "query_categories": {
+        "invoice_count_and_search": {
+          "description": "Count invoices or find/list invoices — by supplier, creator, date, amount, PO number, status. Covers queries like 'how many invoices did we receive from supplier X', 'how many invoices created this month', 'how many invoices are there for PO 1696', 'how many invoices have reporting total >1M'.",
+          "example_queries": [
+            "how many invoices did we receive from supplier polydono this year",
+            "how many amazon invoices in august 2025",
+            "how many invoices were created this month",
+            "how many invoices i am a requester",
+            "how many invoices did angela lashkari create on 08/12",
+            "how many invoices created by myself",
+            "how many invoices were created in the last 90 days with open item",
+            "how many invoices are there for ua213408",
+            "how many invoices did i receive from supplier polydono",
+            "how many invoices have i had with them in the past 3 months",
+            "how many invoices we have from *supplier name*",
+            "what are the count of invoices have reporting total greater than 1M",
+            "GIve me the total number of invoices",
+            "How many invoices created",
+            "how many invoices created each month",
+            "how many invoices created each month in 2024",
+            "how many invoices created in 2024",
+            "how many invoices are due this week",
+            "report of invoices that are created via coupa supplier portal"
+          ],
+          "available_dimensions": [
+            {
+              "name": "invoices.supplier_name",
+              "label": "Supplier Name",
+              "description": "Supplier who issued the invoice"
+            },
+            {
+              "name": "invoices.created_date",
+              "label": "Created Date",
+              "description": "Date invoice was created in Coupa"
+            },
+            {
+              "name": "invoices.created_month",
+              "label": "Created Month",
+              "description": "Month invoice was created"
+            },
+            {
+              "name": "invoices.created_quarter",
+              "label": "Created Quarter",
+              "description": "Quarter invoice was created"
+            },
+            {
+              "name": "invoices.created_year",
+              "label": "Created Year",
+              "description": "Year invoice was created"
+            },
+            {
+              "name": "invoices.invoice_date",
+              "label": "Invoice Date",
+              "description": "Date printed on invoice"
+            },
+            {
+              "name": "invoices.invoice_month",
+              "label": "Invoice Month",
+              "description": "Month from invoice date"
+            },
+            {
+              "name": "invoices.invoice_quarter",
+              "label": "Invoice Quarter",
+              "description": "Quarter from invoice date"
+            },
+            {
+              "name": "invoices.invoice_year",
+              "label": "Invoice Year",
+              "description": "Year from invoice date"
+            },
+            {
+              "name": "invoices.status",
+              "label": "Invoice Status",
+              "description": "Current invoice status"
+            },
+            {
+              "name": "invoices.invoice_channel",
+              "label": "Invoice Channel",
+              "description": "How invoice was submitted (cXML, portal, email…)"
+            },
+            {
+              "name": "invoices.po_backed",
+              "label": "PO Backed",
+              "description": "Whether invoice is backed by a PO"
+            },
+            {
+              "name": "invoices.paid",
+              "label": "Paid",
+              "description": "Whether invoice has been paid"
+            },
+            {
+              "name": "suppliers.name",
+              "label": "Supplier Name (suppliers view)",
+              "description": "Supplier name via suppliers view"
+            },
+            {
+              "name": "suppliers.channel",
+              "label": "Supplier Channel",
+              "description": "Supplier channel designation"
+            },
+            {
+              "name": "suppliers.supplier_country",
+              "label": "Supplier Country",
+              "description": "Country of the supplier"
+            }
+          ],
+          "available_measures": [
+            {
+              "name": "invoices.count_invoice_header_id",
+              "label": "Invoice Count",
+              "description": "Count of distinct invoices"
+            },
+            {
+              "name": "invoices.sum_invoice_line_reporting_total",
+              "label": "Total Invoice Amount",
+              "description": "Sum of invoice line reporting totals"
+            }
+          ],
+          "available_filters": [
+            {
+              "name": "invoices.supplier_name",
+              "label": "Supplier Name",
+              "description": "Filter by supplier name"
+            },
+            {
+              "name": "invoices.created_date",
+              "label": "Created Date",
+              "description": "Filter by creation date"
+            },
+            {
+              "name": "invoices.created_month",
+              "label": "Created Month",
+              "description": "Filter by creation month"
+            },
+            {
+              "name": "invoices.created_year",
+              "label": "Created Year",
+              "description": "Filter by creation year"
+            },
+            {
+              "name": "invoices.invoice_date",
+              "label": "Invoice Date",
+              "description": "Filter by invoice date"
+            },
+            {
+              "name": "invoices.invoice_month",
+              "label": "Invoice Month",
+              "description": "Filter by invoice month"
+            },
+            {
+              "name": "invoices.invoice_quarter",
+              "label": "Invoice Quarter",
+              "description": "Filter by invoice quarter"
+            },
+            {
+              "name": "invoices.invoice_year",
+              "label": "Invoice Year",
+              "description": "Filter by invoice year"
+            },
+            {
+              "name": "invoices.status",
+              "label": "Invoice Status",
+              "description": "Filter by status"
+            },
+            {
+              "name": "invoices.invoice_progress_status",
+              "label": "IPS",
+              "description": "Invoice progress status filter"
+            },
+            {
+              "name": "invoices.created_by",
+              "label": "Created By (User ID)",
+              "description": "Filter invoices by creator user ID; use 99999 for current user"
+            },
+            {
+              "name": "invoices.created_by_name",
+              "label": "Created By Name",
+              "description": "Filter by creator name string"
+            },
+            {
+              "name": "invoice.created_by_id",
+              "label": "Created By ID (alt)",
+              "description": "Alternate creator ID field"
+            },
+            {
+              "name": "invoices.invoice_channel",
+              "label": "Invoice Channel",
+              "description": "Filter by channel"
+            },
+            {
+              "name": "invoices.sum_invoice_line_reporting_total",
+              "label": "Invoice Total (filter)",
+              "description": "Filter invoices above/below a dollar threshold"
+            },
+            {
+              "name": "invoices.paid",
+              "label": "Paid",
+              "description": "Filter paid vs unpaid"
+            },
+            {
+              "name": "invoices.net_due_date",
+              "label": "Net Due Date",
+              "description": "Filter by net due date (for overdue/due-this-week queries)"
+            },
+            {
+              "name": "invoices.net_due_month",
+              "label": "Net Due Month",
+              "description": "Filter by net due month"
+            },
+            {
+              "name": "orders.po_number",
+              "label": "PO Number",
+              "description": "Filter invoices linked to a specific PO"
+            },
+            {
+              "name": "users.id",
+              "label": "User ID",
+              "description": "Filter to a specific user's invoices"
+            },
+            {
+              "name": "users.fullname",
+              "label": "User Full Name",
+              "description": "Filter by user full name"
+            },
+            {
+              "name": "suppliers.name",
+              "label": "Supplier Name (suppliers view)",
+              "description": "Filter via suppliers view"
+            },
+            {
+              "name": "suppliers.supplier_country",
+              "label": "Supplier Country",
+              "description": "Filter by supplier country"
+            }
+          ]
+        },
+        "invoice_approval_and_status": {
+          "description": "Invoice approval workflow — pending, overdue, paid-on-time, aged invoices, status distribution, pending-receipt. Covers queries like 'how many invoices i need to approve', 'how many overdue invoices', 'what is total value in pending receipt status'.",
+          "example_queries": [
+            "how many invoices are on pending approval status",
+            "how many invoices i need to approve",
+            "how many pending approval mcmaster carr invoices are there",
+            "how many invoices are pending for po 1696",
+            "how many pending invoices are with company foxnew",
+            "how many invoices to approve",
+            "how many invoices were approved in the last 90 days",
+            "what is the total number of invoices in pending approval status",
+            "how many pending approval invoices we currently have",
+            "what is the total value of all invoices currently in pending receipt",
+            "how many invoices are in pending receipt status and what is the total dollar value",
+            "what are the total number of open invoices",
+            "How many invoices are pending",
+            "Whats the distribution of invoice statuses in a donut chart",
+            "how many invoices were paid on time in 2024 by payment date",
+            "how many invoices are overdue",
+            "show me aged invoices in Analytics"
+          ],
+          "available_dimensions": [
+            {
+              "name": "invoices.status",
+              "label": "Invoice Status",
+              "description": "Approval status: approved, pending, rejected, on_hold…"
+            },
+            {
+              "name": "invoices.invoice_progress_status",
+              "label": "IPS",
+              "description": "Detailed invoice progress status (pending approval, pending receipt, etc.)"
+            },
+            {
+              "name": "invoices.paid",
+              "label": "Paid",
+              "description": "Whether invoice has been paid"
+            },
+            {
+              "name": "invoices.paid_on_time",
+              "label": "Paid On Time",
+              "description": "Whether invoice was paid by net due date"
+            },
+            {
+              "name": "invoices.net_due_date",
+              "label": "Net Due Date",
+              "description": "Payment due date"
+            },
+            {
+              "name": "invoices.net_due_month",
+              "label": "Net Due Month",
+              "description": "Month of net due date"
+            },
+            {
+              "name": "invoices.net_due_quarter",
+              "label": "Net Due Quarter",
+              "description": "Quarter of net due date"
+            },
+            {
+              "name": "invoices.net_due_year",
+              "label": "Net Due Year",
+              "description": "Year of net due date"
+            },
+            {
+              "name": "invoices.created_date",
+              "label": "Created Date",
+              "description": "Invoice creation date"
+            },
+            {
+              "name": "invoices.created_month",
+              "label": "Created Month",
+              "description": "Month created"
+            },
+            {
+              "name": "invoices.supplier_name",
+              "label": "Supplier Name",
+              "description": "Supplier name on invoice"
+            }
+          ],
+          "available_measures": [
+            {
+              "name": "invoices.count_invoice_header_id",
+              "label": "Invoice Count",
+              "description": "Count of invoices in status"
+            },
+            {
+              "name": "invoices.sum_invoice_line_reporting_total",
+              "label": "Total Invoice Amount",
+              "description": "Total value of invoices"
+            },
+            {
+              "name": "invoices.avg_submitted_to_approved",
+              "label": "Avg Cycle Time (days)",
+              "description": "Average days from submission to approval"
+            }
+          ],
+          "available_filters": [
+            {
+              "name": "invoices.status",
+              "label": "Invoice Status",
+              "description": "Filter by status (pending, approved, on_hold, etc.)"
+            },
+            {
+              "name": "invoices.invoice_progress_status",
+              "label": "IPS",
+              "description": "Filter by progress status"
+            },
+            {
+              "name": "invoices.paid",
+              "label": "Paid",
+              "description": "Filter paid/unpaid"
+            },
+            {
+              "name": "invoices.paid_on_time",
+              "label": "Paid On Time",
+              "description": "Filter on-time vs late"
+            },
+            {
+              "name": "invoices.net_due_date",
+              "label": "Net Due Date",
+              "description": "Filter by due date"
+            },
+            {
+              "name": "invoices.net_due_month",
+              "label": "Net Due Month",
+              "description": "Filter by due month"
+            },
+            {
+              "name": "invoices.net_due_quarter",
+              "label": "Net Due Quarter",
+              "description": "Filter by due quarter"
+            },
+            {
+              "name": "invoices.net_due_year",
+              "label": "Net Due Year",
+              "description": "Filter by due year"
+            },
+            {
+              "name": "invoices.created_month",
+              "label": "Created Month",
+              "description": "Filter by creation month"
+            },
+            {
+              "name": "invoices.created_year",
+              "label": "Created Year",
+              "description": "Filter by creation year"
+            },
+            {
+              "name": "invoices.supplier_name",
+              "label": "Supplier Name",
+              "description": "Filter by supplier"
+            },
+            {
+              "name": "approvals.approver_id",
+              "label": "Approver User ID",
+              "description": "Filter invoices awaiting a specific approver; use 99999 for self"
+            },
+            {
+              "name": "approvals.status",
+              "label": "Approval Step Status",
+              "description": "Filter by status of an approval step"
+            },
+            {
+              "name": "orders.po_number",
+              "label": "PO Number",
+              "description": "Filter invoices linked to a specific PO"
+            },
+            {
+              "name": "users.id",
+              "label": "Current User ID",
+              "description": "Use 99999 to mean 'me'"
+            },
+            {
+              "name": "users.fullname",
+              "label": "User Full Name",
+              "description": "Filter by approver name string"
+            },
+            {
+              "name": "supplers.id",
+              "label": "Supplier ID (alt)",
+              "description": "Filter by supplier ID"
+            }
+          ]
+        },
+        "invoice_spend_trend": {
+          "description": "Invoice spend totals and time-series trends — by month, quarter, year; bar/line/pie charts; YoY growth. Covers 'how has invoice spend changed by quarter', 'create a bar chart with spend by month', 'show monthly invoice totals as a line chart', 'YoY growth of invoice volumes'.",
+          "example_queries": [
+            "can you tell me how much i have spent over last 3 months",
+            "how much did we spend with suppliers last year",
+            "how has invoice spend changed by quarter?",
+            "show me invoice spend for the last 4 quarters.",
+            "create a bar chart with spend by month over the last 12 months",
+            "Show me monthly invoice totals for the past year as a line chart",
+            "Whats the year-over-year growth of invoice volumes by month as a line chart",
+            "show approved invoice spend with invoice month as x-axis in the last 12 months",
+            "How much was approved in software invoices from Acme Inc. last year",
+            "Can you provide the Grand Total",
+            "Can I have a bar chart of spend supplier wise",
+            "Display invoice amounts by supplier in a bar chart for top 10 suppliers"
+          ],
+          "available_dimensions": [
+            {
+              "name": "invoices.invoice_month",
+              "label": "Invoice Month",
+              "description": "Month of invoice"
+            },
+            {
+              "name": "invoices.invoice_quarter",
+              "label": "Invoice Quarter",
+              "description": "Quarter of invoice"
+            },
+            {
+              "name": "invoices.invoice_year",
+              "label": "Invoice Year",
+              "description": "Year of invoice"
+            },
+            {
+              "name": "invoices.created_month",
+              "label": "Created Month",
+              "description": "Month invoice was created"
+            },
+            {
+              "name": "invoices.created_quarter",
+              "label": "Created Quarter",
+              "description": "Quarter invoice was created"
+            },
+            {
+              "name": "invoices.created_year",
+              "label": "Created Year",
+              "description": "Year invoice was created"
+            },
+            {
+              "name": "invoices.status",
+              "label": "Invoice Status",
+              "description": "Status for approved-spend filter"
+            },
+            {
+              "name": "invoices.supplier_name",
+              "label": "Supplier Name",
+              "description": "Supplier – for supplier-wise spend"
+            },
+            {
+              "name": "commodities.commodity_name",
+              "label": "Commodity",
+              "description": "Commodity category"
+            },
+            {
+              "name": "accounts.name",
+              "label": "Account",
+              "description": "Account/cost centre"
+            },
+            {
+              "name": "suppliers.supplier_country",
+              "label": "Supplier Country",
+              "description": "Country for geographic spend split"
+            }
+          ],
+          "available_measures": [
+            {
+              "name": "invoices.sum_invoice_line_reporting_total",
+              "label": "Total Invoice Spend",
+              "description": "Sum of invoice line totals"
+            },
+            {
+              "name": "invoices.count_invoice_header_id",
+              "label": "Invoice Count",
+              "description": "Count of invoices"
+            }
+          ],
+          "available_filters": [
+            {
+              "name": "invoices.invoice_month",
+              "label": "Invoice Month",
+              "description": "Filter by invoice month"
+            },
+            {
+              "name": "invoices.invoice_quarter",
+              "label": "Invoice Quarter",
+              "description": "Filter by quarter"
+            },
+            {
+              "name": "invoices.invoice_year",
+              "label": "Invoice Year",
+              "description": "Filter by year"
+            },
+            {
+              "name": "invoices.created_month",
+              "label": "Created Month",
+              "description": "Filter by creation month"
+            },
+            {
+              "name": "invoices.created_year",
+              "label": "Created Year",
+              "description": "Filter by creation year"
+            },
+            {
+              "name": "invoices.status",
+              "label": "Invoice Status",
+              "description": "Filter to approved invoices only"
+            },
+            {
+              "name": "invoices.supplier_name",
+              "label": "Supplier Name",
+              "description": "Filter for specific supplier spend"
+            },
+            {
+              "name": "suppliers.supplier_country",
+              "label": "Supplier Country",
+              "description": "Filter by country (e.g. UK)"
+            },
+            {
+              "name": "commodities.commodity_name",
+              "label": "Commodity",
+              "description": "Filter by commodity"
+            },
+            {
+              "name": "commodities.name",
+              "label": "Commodity (alt)",
+              "description": "Alternate commodity name field"
+            }
+          ]
+        },
+        "supplier_spend_analysis": {
+          "description": "Supplier-level invoice spend — top suppliers, tail suppliers, specific-supplier lookups, spend concentration. Covers 'who are the top 10 suppliers by spend', 'can you list the tail suppliers', 'how much have i spent at SAP', 'which is my most used supplier'.",
+          "example_queries": [
+            "who are the top 10 suppliers by spend in the last year?",
+            "which suppliers make up most of our spend?",
+            "how many suppliers are in the bottom 20% of our spend?",
+            "can you list the tail suppliers from the last 12 months?",
+            "what have we spent with sap on average over the last 5 years",
+            "last twelve month spend for *supplier name*",
+            "spend for *supplier name*",
+            "how much have i spent at *supplier name* this year",
+            "who are my top 10 suppliers by spend",
+            "where can i see the dollar spend with each vendor",
+            "which is my most used supplier",
+            "What is the spend on Avaya in the last 5 years",
+            "create a analytics report on supplier spend in uk",
+            "how much have i spent on office supplies"
+          ],
+          "available_dimensions": [
+            {
+              "name": "invoices.supplier_name",
+              "label": "Supplier Name",
+              "description": "Primary supplier name dimension on invoices"
+            },
+            {
+              "name": "supplier_name.name",
+              "label": "Supplier Name (alt view)",
+              "description": "Supplier name via supplier_name view"
+            },
+            {
+              "name": "suppliers.name",
+              "label": "Supplier Name (suppliers view)",
+              "description": "Supplier name via suppliers view"
+            },
+            {
+              "name": "suppliers.channel",
+              "label": "Supplier Channel",
+              "description": "Supplier channel"
+            },
+            {
+              "name": "suppliers.supplier_country",
+              "label": "Supplier Country",
+              "description": "Country for geographic filtering"
+            },
+            {
+              "name": "invoices.invoice_year",
+              "label": "Invoice Year",
+              "description": "Year for trend across years"
+            },
+            {
+              "name": "invoices.invoice_month",
+              "label": "Invoice Month",
+              "description": "Month for trend"
+            },
+            {
+              "name": "commodities.commodity_name",
+              "label": "Commodity",
+              "description": "Commodity (e.g. office supplies)"
+            }
+          ],
+          "available_measures": [
+            {
+              "name": "invoices.sum_invoice_line_reporting_total",
+              "label": "Total Spend",
+              "description": "Total invoice spend per supplier"
+            },
+            {
+              "name": "invoices.count_invoice_header_id",
+              "label": "Invoice Count",
+              "description": "Number of invoices per supplier"
+            },
+            {
+              "name": "invoices.avg_submitted_to_approved",
+              "label": "Avg Cycle Time",
+              "description": "Average processing time"
+            }
+          ],
+          "available_filters": [
+            {
+              "name": "invoices.supplier_name",
+              "label": "Supplier Name",
+              "description": "Filter by specific supplier name (supports contains/wildcard)"
+            },
+            {
+              "name": "suppliers.name",
+              "label": "Supplier Name (suppliers view)",
+              "description": "Alternate supplier name filter"
+            },
+            {
+              "name": "suppliers.supplier_country",
+              "label": "Supplier Country",
+              "description": "Filter by country (e.g. UK, US)"
+            },
+            {
+              "name": "invoices.invoice_year",
+              "label": "Invoice Year",
+              "description": "Filter by year"
+            },
+            {
+              "name": "invoices.invoice_month",
+              "label": "Invoice Month",
+              "description": "Filter by month"
+            },
+            {
+              "name": "invoices.invoice_quarter",
+              "label": "Invoice Quarter",
+              "description": "Filter by quarter"
+            },
+            {
+              "name": "commodities.commodity_name",
+              "label": "Commodity",
+              "description": "Filter by commodity (e.g. office supplies)"
+            },
+            {
+              "name": "commodities.name",
+              "label": "Commodity (alt)",
+              "description": "Alternate commodity name filter"
+            },
+            {
+              "name": "users.id",
+              "label": "User ID",
+              "description": "Use 99999 to show spend for current user only"
+            },
+            {
+              "name": "users.fullname",
+              "label": "User Name",
+              "description": "Filter to a named user's spend"
+            },
+            {
+              "name": "Suppliers.Percentage_of_Suppliers",
+              "label": "Supplier %, Top/Bottom",
+              "description": "Filter to top or bottom N% of suppliers by spend"
+            }
+          ]
+        },
+        "po_backed_spend": {
+          "description": "PO-backed vs non-PO-backed spend breakdown — ratio, trends, specific periods. Covers 'how much of our spend is po-backed vs non-po-backed', 'breakdown for 2024', 'last 6 months'.",
+          "example_queries": [
+            "how much of our spend is po-backed vs non-po-backed?",
+            "can you break down po-backed spend for the last 6 months?",
+            "What is the breakdown of PO-backed and non PO-backed spend for 2024",
+            "how much is our po backed spend compared to non-po backed spend",
+            "What is the breakdown of PO-backed and non-PO-backed spend in the last 12 months"
+          ],
+          "available_dimensions": [
+            {
+              "name": "invoices.po_backed",
+              "label": "PO Backed",
+              "description": "Boolean: invoice backed by PO or not"
+            },
+            {
+              "name": "invoices.invoice_month",
+              "label": "Invoice Month",
+              "description": "Month dimension for trend"
+            },
+            {
+              "name": "invoices.invoice_quarter",
+              "label": "Invoice Quarter",
+              "description": "Quarter for trend"
+            },
+            {
+              "name": "invoices.invoice_year",
+              "label": "Invoice Year",
+              "description": "Year dimension"
+            }
+          ],
+          "available_measures": [
+            {
+              "name": "invoices.sum_invoice_line_reporting_total",
+              "label": "Total Spend",
+              "description": "Spend split by PO-backed flag"
+            },
+            {
+              "name": "invoices.count_invoice_header_id",
+              "label": "Invoice Count",
+              "description": "Count split by PO-backed flag"
+            }
+          ],
+          "available_filters": [
+            {
+              "name": "invoices.po_backed",
+              "label": "PO Backed",
+              "description": "Filter to PO-backed or non-PO-backed only"
+            },
+            {
+              "name": "invoices.invoice_year",
+              "label": "Invoice Year",
+              "description": "Filter by year"
+            },
+            {
+              "name": "invoices.invoice_month",
+              "label": "Invoice Month",
+              "description": "Filter by month"
+            },
+            {
+              "name": "invoices.invoice_quarter",
+              "label": "Invoice Quarter",
+              "description": "Filter by quarter"
+            }
+          ]
+        },
+        "contract_and_parent_spend": {
+          "description": "Invoice spend linked to contracts or parent contracts — top contracts by spend, commodity contract spend, parent contract rollup. Covers 'contracts with highest spend', 'contract spend rolled up by parent contract', 'top 10 commodities by contract spend'.",
+          "example_queries": [
+            "give me a list of contracts with the highest spend over the last year.",
+            "show me contract spend rolled up by parent contract.",
+            "what's the total spend under the parent contract this year?",
+            "what are the top 10 commodities by contract spend?"
+          ],
+          "available_dimensions": [
+            {
+              "name": "contracts.name",
+              "label": "Contract Name",
+              "description": "Contract linked to invoices"
+            },
+            {
+              "name": "parent_contract.name",
+              "label": "Parent Contract",
+              "description": "Top-level parent contract rollup"
+            },
+            {
+              "name": "commodities.commodity_name",
+              "label": "Commodity",
+              "description": "Commodity for contract-spend breakdown"
+            },
+            {
+              "name": "invoices.invoice_year",
+              "label": "Invoice Year",
+              "description": "Year for trend"
+            },
+            {
+              "name": "invoices.invoice_quarter",
+              "label": "Invoice Quarter",
+              "description": "Quarter"
+            }
+          ],
+          "available_measures": [
+            {
+              "name": "invoices.sum_invoice_line_reporting_total",
+              "label": "Contract Spend",
+              "description": "Spend attributed to contracts"
+            },
+            {
+              "name": "invoices.count_invoice_header_id",
+              "label": "Invoice Count",
+              "description": "Invoice count under contract"
+            }
+          ],
+          "available_filters": [
+            {
+              "name": "contracts.id",
+              "label": "Contract ID",
+              "description": "Filter by a specific contract"
+            },
+            {
+              "name": "parent_contract.id",
+              "label": "Parent Contract ID",
+              "description": "Filter by parent contract"
+            },
+            {
+              "name": "invoices.invoice_year",
+              "label": "Invoice Year",
+              "description": "Filter by year"
+            },
+            {
+              "name": "invoices.invoice_quarter",
+              "label": "Invoice Quarter",
+              "description": "Filter by quarter"
+            },
+            {
+              "name": "commodities.commodity_name",
+              "label": "Commodity",
+              "description": "Filter by commodity"
+            }
+          ]
+        },
+        "electronic_invoice_and_channel": {
+          "description": "Invoice channel mix and electronic invoice adoption rate — what % are electronic, channel distribution (portal, cXML, email, manual), quarter-over-quarter comparison.",
+          "example_queries": [
+            "what percentage of invoices are electronic?",
+            "how does the electronic invoice rate compare to last quarter?",
+            "what invoice channels are we using?",
+            "how are invoices split across different channels?",
+            "report of invoices that are created via coupa supplier portal"
+          ],
+          "available_dimensions": [
+            {
+              "name": "invoices.invoice_channel",
+              "label": "Invoice Channel",
+              "description": "Channel: cXML, CSP, email, manual, etc."
+            },
+            {
+              "name": "invoices.invoice_quarter",
+              "label": "Invoice Quarter",
+              "description": "Quarter for comparison"
+            },
+            {
+              "name": "invoices.invoice_year",
+              "label": "Invoice Year",
+              "description": "Year for comparison"
+            },
+            {
+              "name": "invoices.invoice_month",
+              "label": "Invoice Month",
+              "description": "Month for trend"
+            }
+          ],
+          "available_measures": [
+            {
+              "name": "invoices.electronic_invoice_rate",
+              "label": "Electronic Invoice Rate",
+              "description": "% of invoices received electronically"
+            },
+            {
+              "name": "invoices.elctronic_invoice_rate",
+              "label": "Electronic Invoice Rate (alt)",
+              "description": "Alternate field name for electronic rate"
+            },
+            {
+              "name": "invoices.count_invoice_header_id",
+              "label": "Invoice Count",
+              "description": "Count by channel"
+            }
+          ],
+          "available_filters": [
+            {
+              "name": "invoices.invoice_quarter",
+              "label": "Invoice Quarter",
+              "description": "Filter by quarter"
+            },
+            {
+              "name": "invoices.invoice_year",
+              "label": "Invoice Year",
+              "description": "Filter by year"
+            },
+            {
+              "name": "invoices.invoice_channel",
+              "label": "Invoice Channel",
+              "description": "Filter to specific channel"
+            },
+            {
+              "name": "suppliers.channel",
+              "label": "Supplier Channel",
+              "description": "Filter by supplier channel setting"
+            }
+          ]
+        },
+        "invoice_cycle_time": {
+          "description": "Invoice processing cycle time — average days from submission to approval, broken down by account. Covers 'average invoice cycle time by account', 'how long does it take to process invoices for each account'.",
+          "example_queries": [
+            "what's the average invoice cycle time by account?",
+            "how long does it take to process invoices for each account?"
+          ],
+          "available_dimensions": [
+            {
+              "name": "accounts.name",
+              "label": "Account",
+              "description": "Account/cost centre for cycle time comparison"
+            },
+            {
+              "name": "invoices.invoice_year",
+              "label": "Invoice Year",
+              "description": "Year filter for cycle time"
+            },
+            {
+              "name": "invoices.invoice_quarter",
+              "label": "Invoice Quarter",
+              "description": "Quarter for trend"
+            }
+          ],
+          "available_measures": [
+            {
+              "name": "invoices.avg_submitted_to_approved",
+              "label": "Avg Cycle Time (days)",
+              "description": "Average days from submission to approval"
+            }
+          ],
+          "available_filters": [
+            {
+              "name": "invoices.invoice_year",
+              "label": "Invoice Year",
+              "description": "Filter by year"
+            },
+            {
+              "name": "invoices.invoice_quarter",
+              "label": "Invoice Quarter",
+              "description": "Filter by quarter"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "explore": "orders",
+      "description": "Purchase order analytics — count/search, spend totals, on-contract rate, electronic PO, commodity/region breakdown, receipt tracking, remaining balance. 53 golden queries.",
+      "primary_view": "orders",
+      "example_queries": [
+        "how many purchase orders were created this year",
+        "how much po spend in last 12 months",
+        "what percentage of pos are electronic?",
+        "what are the top 10 commodities by po spend?",
+        "how much money do i have remaining on po 12345",
+        "how many pos are in each status over the last year?",
+        "what percentage of po spend is on contract?"
+      ],
+      "query_categories": {
+        "po_count_and_search": {
+          "description": "Count or list POs — by supplier, creator, date period, status, amount, department, legal entity. Covers 'how many POs did i create last year', 'how many open POs for dept 811', 'how many orders for techary', 'what supplier has the most orders', 'how many POs are closed vs soft closed', 'show all open POs created this month'.",
+          "example_queries": [
+            "let me know how many pos i have created last year",
+            "how many orders are requested in 2024",
+            "how many pos were issued last month",
+            "how many orders did we created for sandata in the last 6 months",
+            "how many po do we have",
+            "how many pos have we created for supplier polydono",
+            "how many pos are for techary",
+            "how many purchase order have i made",
+            "how many po has been issued in 2024",
+            "how many order less than 500 euros",
+            "how many orders do we have for techary limited",
+            "how many pos did nordstrom inc. users issues to amazon business this year",
+            "how many pos are made in the period july-september 2024",
+            "how many purchase orders are open for dept 811",
+            "how many purchase orders were created this year",
+            "how many pos did i create this year",
+            "how many pos did i create in india legal entity",
+            "how many elitek orders have been ordered in the last 6 months",
+            "who are the suppliers i ordered from in the last 12 months",
+            "what supplier has the most orders",
+            "how many pos are in each status over the last year?",
+            "how many pos are 'closed' vs 'soft closed' right now?",
+            "how many open purchase orders currently exist",
+            "Can you show all Open POs created this month",
+            "what was our largest po this year",
+            "can you sum all the orders for me",
+            "how many punchout catalogues do we have",
+            "show me purchase requisitions for barclaycard commercial supplier"
+          ],
+          "available_dimensions": [
+            {
+              "name": "orders.created_date",
+              "label": "Created Date",
+              "description": "Date PO was created"
+            },
+            {
+              "name": "orders.created_month",
+              "label": "Created Month",
+              "description": "Month PO was created"
+            },
+            {
+              "name": "orders.created_quarter",
+              "label": "Created Quarter",
+              "description": "Quarter PO was created"
+            },
+            {
+              "name": "orders.created_year",
+              "label": "Created Year",
+              "description": "Year PO was created"
+            },
+            {
+              "name": "orders.order_header_status",
+              "label": "PO Status",
+              "description": "PO header status: open, closed, soft_closed, cancelled, pending_approval"
+            },
+            {
+              "name": "orders.order_header_id",
+              "label": "PO Header ID",
+              "description": "Internal PO header ID"
+            },
+            {
+              "name": "orders.po_number",
+              "label": "PO Number",
+              "description": "Human-readable PO number"
+            },
+            {
+              "name": "suppliers.name",
+              "label": "Supplier Name",
+              "description": "Supplier on PO"
+            },
+            {
+              "name": "supplier_name.name",
+              "label": "Supplier Name (alt)",
+              "description": "Alternate supplier name view"
+            },
+            {
+              "name": "invoices.supplier_name",
+              "label": "Supplier Name (through invoices)",
+              "description": "Supplier name via invoices view"
+            },
+            {
+              "name": "items.name",
+              "label": "Item Name",
+              "description": "Item ordered on PO"
+            },
+            {
+              "name": "orders.order_header_reporting_total",
+              "label": "PO Total",
+              "description": "Total value of PO header"
+            },
+            {
+              "name": "suppliers.supplier_region",
+              "label": "Supplier Region",
+              "description": "Supplier geographic region"
+            }
+          ],
+          "available_measures": [
+            {
+              "name": "orders.count_order_header_id",
+              "label": "PO Count",
+              "description": "Count of distinct POs"
+            },
+            {
+              "name": "orders.sum_order_line_reporting_total",
+              "label": "Total PO Spend",
+              "description": "Sum of PO line totals"
+            },
+            {
+              "name": "orders.sum_order_all_pending_approval_amount",
+              "label": "Pending Approval Amount",
+              "description": "Value of POs pending approval"
+            }
+          ],
+          "available_filters": [
+            {
+              "name": "orders.created_by",
+              "label": "Created By (User ID)",
+              "description": "Filter by creator; use 99999 for current user"
+            },
+            {
+              "name": "orders.created_date",
+              "label": "Created Date",
+              "description": "Filter by date"
+            },
+            {
+              "name": "orders.created_month",
+              "label": "Created Month",
+              "description": "Filter by month"
+            },
+            {
+              "name": "orders.created_at_month",
+              "label": "Created At Month (alt)",
+              "description": "Alternate created month field"
+            },
+            {
+              "name": "orders.created_quarter",
+              "label": "Created Quarter",
+              "description": "Filter by quarter"
+            },
+            {
+              "name": "orders.created_year",
+              "label": "Created Year",
+              "description": "Filter by year"
+            },
+            {
+              "name": "orders.created_at_year",
+              "label": "Created At Year (alt)",
+              "description": "Alternate created year field"
+            },
+            {
+              "name": "orders.order_header_status",
+              "label": "PO Status",
+              "description": "Filter by status (open, closed, soft_closed, etc.)"
+            },
+            {
+              "name": "orders.po_number",
+              "label": "PO Number",
+              "description": "Filter by specific PO number"
+            },
+            {
+              "name": "orders.order_header_reporting_total",
+              "label": "PO Total",
+              "description": "Filter by dollar amount (e.g. <500, >10000)"
+            },
+            {
+              "name": "orders.order_source",
+              "label": "Order Source",
+              "description": "Filter by catalog/punchout/non-catalog source"
+            },
+            {
+              "name": "orders.country",
+              "label": "Country",
+              "description": "Filter by country/legal entity country"
+            },
+            {
+              "name": "suppliers.name",
+              "label": "Supplier Name",
+              "description": "Filter by supplier"
+            },
+            {
+              "name": "items.name",
+              "label": "Item Name",
+              "description": "Filter by item name"
+            },
+            {
+              "name": "departments.id",
+              "label": "Department ID",
+              "description": "Filter by department"
+            },
+            {
+              "name": "contracts.name",
+              "label": "Contract Name",
+              "description": "Filter by contract"
+            },
+            {
+              "name": "requested_by_user.id",
+              "label": "Requested By User ID",
+              "description": "Filter by requester"
+            },
+            {
+              "name": "requisitions.req_header_created_by",
+              "label": "Req Created By",
+              "description": "Filter by req creator via requisitions view"
+            }
+          ]
+        },
+        "po_spend_and_contract_rate": {
+          "description": "Total PO spend, trends, on-contract vs off-contract rate, spend by status, spend trend by quarter. Covers 'how much PO spend in last 12 months', 'what % of PO spend is on contract', 'PO spend trend by quarter', 'how much on closed POs'.",
+          "example_queries": [
+            "how much po spend in last 12 months",
+            "what's the total po spend for the last 12 months?",
+            "can you break down po spend by status over the last year?",
+            "how much did we spend on 'closed' pos in the last 12 months?",
+            "what percentage of po spend is on contract?",
+            "how much of our po spend is off-contract this quarter?",
+            "what's our po spend trend by quarter?",
+            "show me po spend for the last 4 quarters.",
+            "What percentage of PO spend is on contract FQA_R42_PR07_Cntr",
+            "compare order total by commodity in a bar graph"
+          ],
+          "available_dimensions": [
+            {
+              "name": "orders.created_month",
+              "label": "Created Month",
+              "description": "Month for trend"
+            },
+            {
+              "name": "orders.created_quarter",
+              "label": "Created Quarter",
+              "description": "Quarter for trend"
+            },
+            {
+              "name": "orders.created_year",
+              "label": "Created Year",
+              "description": "Year for trend"
+            },
+            {
+              "name": "orders.order_header_status",
+              "label": "PO Status",
+              "description": "Status dimension for breakdown"
+            },
+            {
+              "name": "suppliers.name",
+              "label": "Supplier",
+              "description": "Supplier dimension for breakdown"
+            },
+            {
+              "name": "commodities.commodity_name",
+              "label": "Commodity",
+              "description": "Commodity for spend breakdown"
+            }
+          ],
+          "available_measures": [
+            {
+              "name": "orders.sum_order_line_reporting_total",
+              "label": "Total PO Spend",
+              "description": "Sum of all PO line totals"
+            },
+            {
+              "name": "orders.count_order_header_id",
+              "label": "PO Count",
+              "description": "Count of POs"
+            },
+            {
+              "name": "orders.po_spend_rate",
+              "label": "On-Contract Spend Rate",
+              "description": "% of PO spend that is on contract"
+            },
+            {
+              "name": "orders.sum_order_all_pending_approval_amount",
+              "label": "Pending Approval Amount",
+              "description": "Total PO value pending approval"
+            }
+          ],
+          "available_filters": [
+            {
+              "name": "orders.created_month",
+              "label": "Created Month",
+              "description": "Filter by month"
+            },
+            {
+              "name": "orders.created_quarter",
+              "label": "Created Quarter",
+              "description": "Filter by quarter"
+            },
+            {
+              "name": "orders.created_year",
+              "label": "Created Year",
+              "description": "Filter by year"
+            },
+            {
+              "name": "orders.order_header_status",
+              "label": "PO Status",
+              "description": "Filter by status"
+            },
+            {
+              "name": "contracts.id",
+              "label": "Contract ID",
+              "description": "Filter by specific contract"
+            },
+            {
+              "name": "contracts.name",
+              "label": "Contract Name",
+              "description": "Filter by contract name"
+            },
+            {
+              "name": "suppliers.name",
+              "label": "Supplier Name",
+              "description": "Filter by supplier"
+            },
+            {
+              "name": "commodities.commodity_name",
+              "label": "Commodity",
+              "description": "Filter by commodity"
+            }
+          ]
+        },
+        "electronic_po_rate": {
+          "description": "Electronic PO adoption — what % of POs are transmitted electronically, quarter-over-quarter comparison.",
+          "example_queries": [
+            "what percentage of pos are electronic?",
+            "how does the electronic po rate look compared to last quarter?"
+          ],
+          "available_dimensions": [
+            {
+              "name": "orders.created_quarter",
+              "label": "Created Quarter",
+              "description": "Quarter for comparison"
+            },
+            {
+              "name": "orders.created_year",
+              "label": "Created Year",
+              "description": "Year for comparison"
+            }
+          ],
+          "available_measures": [
+            {
+              "name": "orders.rate_of_electronic_po",
+              "label": "Electronic PO Rate",
+              "description": "% of POs transmitted electronically"
+            }
+          ],
+          "available_filters": [
+            {
+              "name": "orders.created_quarter",
+              "label": "Created Quarter",
+              "description": "Filter by quarter"
+            },
+            {
+              "name": "orders.created_year",
+              "label": "Created Year",
+              "description": "Filter by year"
+            }
+          ]
+        },
+        "commodity_and_region_breakdown": {
+          "description": "PO spend or count broken down by commodity or supplier region — top commodities, donut/pie charts, regional distribution.",
+          "example_queries": [
+            "what are the top 10 commodities by po spend?",
+            "which commodities are driving the most po spend this quarter?",
+            "Show me the breakdown of orders by commodity level 2 in a donut chart",
+            "Whats the distribution of order total by supplier region in a pie chart",
+            "compare order total by commodity in a bar graph"
+          ],
+          "available_dimensions": [
+            {
+              "name": "commodities.commodity_name",
+              "label": "Commodity",
+              "description": "Primary commodity grouping"
+            },
+            {
+              "name": "commodities.commodity_level_2",
+              "label": "Commodity Level 2",
+              "description": "Second-level commodity grouping"
+            },
+            {
+              "name": "commodities.name",
+              "label": "Commodity (alt)",
+              "description": "Alternate commodity name"
+            },
+            {
+              "name": "commodoties.commodity_name",
+              "label": "Commodity (typo variant)",
+              "description": "Dataset variant field name"
+            },
+            {
+              "name": "suppliers.supplier_region",
+              "label": "Supplier Region",
+              "description": "Supplier geographic region"
+            }
+          ],
+          "available_measures": [
+            {
+              "name": "orders.sum_order_line_reporting_total",
+              "label": "Total PO Spend",
+              "description": "Spend by commodity/region"
+            },
+            {
+              "name": "orders.count_order_header_id",
+              "label": "PO Count",
+              "description": "Count by commodity/region"
+            }
+          ],
+          "available_filters": [
+            {
+              "name": "orders.created_quarter",
+              "label": "Created Quarter",
+              "description": "Filter by quarter"
+            },
+            {
+              "name": "orders.created_year",
+              "label": "Created Year",
+              "description": "Filter by year"
+            },
+            {
+              "name": "commodities.commodity_name",
+              "label": "Commodity",
+              "description": "Filter by commodity"
+            },
+            {
+              "name": "suppliers.supplier_region",
+              "label": "Supplier Region",
+              "description": "Filter by region"
+            }
+          ]
+        },
+        "receipt_and_remaining_balance": {
+          "description": "Goods receipt counts on POs, remaining balance on a specific PO, POs created after invoice date. Covers 'how much money is left on PO', 'how many receipts for PO #27059', 'how many POs created after the invoice date'.",
+          "example_queries": [
+            "how much money is left on po#lp248041",
+            "how many receipts have been created for po #27059",
+            "how many invoices are there for po 1696",
+            "how many pos were created after the invoice date in the last 12 months",
+            "how much money do i have remaining on po 12345"
+          ],
+          "available_dimensions": [
+            {
+              "name": "orders.po_number",
+              "label": "PO Number",
+              "description": "Specific PO to look up"
+            }
+          ],
+          "available_measures": [
+            {
+              "name": "receipts.count_receipt_id",
+              "label": "Receipt Count",
+              "description": "Number of goods receipts against the PO"
+            },
+            {
+              "name": "pay_invoices.sum_remaining_amount",
+              "label": "Remaining Amount",
+              "description": "Amount remaining uncommitted on PO"
+            },
+            {
+              "name": "invoices.count_invoice_header_id",
+              "label": "Invoice Count",
+              "description": "Invoices linked to PO"
+            }
+          ],
+          "available_filters": [
+            {
+              "name": "orders.po_number",
+              "label": "PO Number",
+              "description": "Filter to a specific PO number"
+            },
+            {
+              "name": "orders.created_date",
+              "label": "Created Date",
+              "description": "Filter by creation date"
+            },
+            {
+              "name": "orders.created_year",
+              "label": "Created Year",
+              "description": "Filter by year"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "explore": "requisitions",
+      "description": "Requisition analytics — count, approval/status, cycle time, supplier search, amount threshold, trend over time. 34 golden queries.",
+      "primary_view": "requisitions",
+      "example_queries": [
+        "how many requisitions did i create in 2024",
+        "how many requisitions are currently in pending buyer action status",
+        "how many reqs are pending jonathan jurss approval",
+        "what's the average requisition-to-order cycle time by account?",
+        "how many requisitions have been submitted for diverse suppliers",
+        "how many requisitions have over 5000 usd in total",
+        "Show me the trend of requisition submissions over the last 6 months"
+      ],
+      "query_categories": {
+        "req_count_and_search": {
+          "description": "Count or list requisitions — by creator, supplier, date period, amount threshold, status. Covers 'how many reqs did i create', 'how many reqs for supplier X', 'how many prs over 1M', 'how many reqs have been submitted against getz global', 'show me reqs created for amazon eu spain'.",
+          "example_queries": [
+            "how many requisitions did i create in 2024",
+            "how many requisitions did i create last year",
+            "how many prs did i create in the last 6 months",
+            "how many requisitions have been opened this year",
+            "what is the total number of requisitions that have been opened this year",
+            "how many pr created in this year",
+            "how many request are created in this year",
+            "how many prs have i issued over the past year",
+            "how many requisition i have submitted",
+            "how many requests have been written to fastenal",
+            "how many requiistion we have for cdw direct in coupa",
+            "how many getz global req do i have",
+            "how many req have been submitted against getz global",
+            "how many requisitions are open for the supplier kevin test ag",
+            "can you show me the requisitions for supplier 801258_e",
+            "show me requisitions created for amazon eu spain supplier",
+            "what is the status of the requisitions with supplier name that was created last month",
+            "how many requisitions were passed last year",
+            "how many requisitions are pending in the system",
+            "can you show me how many reqs over 1m we have had in 2024",
+            "how many requisitions have over 5000 usd in total",
+            "how many open reqs are there under marketing",
+            "Generate an analysis on number of requisitions opened this year"
+          ],
+          "available_dimensions": [
+            {
+              "name": "requisitions.req_header_created_date",
+              "label": "Created Date",
+              "description": "Date requisition was created"
+            },
+            {
+              "name": "requisitions.req_header_created_month",
+              "label": "Created Month",
+              "description": "Month requisition was created"
+            },
+            {
+              "name": "requisitions.req_header_created_quarter",
+              "label": "Created Quarter",
+              "description": "Quarter requisition was created"
+            },
+            {
+              "name": "requisitions.req_header_created_year",
+              "label": "Created Year",
+              "description": "Year requisition was created"
+            },
+            {
+              "name": "requisitions.requisition_header_status",
+              "label": "Status",
+              "description": "Requisition status: approved, pending, rejected, etc."
+            },
+            {
+              "name": "requisitions.requisition_header_id",
+              "label": "Req Header ID",
+              "description": "Internal requisition ID"
+            },
+            {
+              "name": "requisitions.req_created_by_name",
+              "label": "Created By Name",
+              "description": "Full name of the creator"
+            },
+            {
+              "name": "requested_by_user.fullname",
+              "label": "Requested By",
+              "description": "Person on whose behalf req was created"
+            },
+            {
+              "name": "suppliers.name",
+              "label": "Supplier Name",
+              "description": "Preferred supplier on req"
+            },
+            {
+              "name": "supplier_name.name",
+              "label": "Supplier Name (alt)",
+              "description": "Alternate supplier name"
+            },
+            {
+              "name": "invoices.supplier_name",
+              "label": "Supplier (invoices view)",
+              "description": "Supplier name via invoices view"
+            },
+            {
+              "name": "accounts.name",
+              "label": "Account",
+              "description": "Account/department coded on req"
+            }
+          ],
+          "available_measures": [
+            {
+              "name": "requisitions.count_requisition_header_id",
+              "label": "Req Count",
+              "description": "Count of distinct requisitions"
+            },
+            {
+              "name": "requisitions.sum_req_line_reporting_total",
+              "label": "Total Req Amount",
+              "description": "Sum of requisition line totals"
+            }
+          ],
+          "available_filters": [
+            {
+              "name": "requisitions.req_header_created_by",
+              "label": "Created By (User ID)",
+              "description": "Filter by creator; use 99999 for current user"
+            },
+            {
+              "name": "requisitions.req_header_created_date",
+              "label": "Created Date",
+              "description": "Filter by date"
+            },
+            {
+              "name": "requisitions.req_header_created_month",
+              "label": "Created Month",
+              "description": "Filter by month"
+            },
+            {
+              "name": "requisitions.req_header_created_quarter",
+              "label": "Created Quarter",
+              "description": "Filter by quarter"
+            },
+            {
+              "name": "requisitions.req_header_created_year",
+              "label": "Created Year",
+              "description": "Filter by year"
+            },
+            {
+              "name": "requisitions.requisition_header_status",
+              "label": "Status",
+              "description": "Filter by status"
+            },
+            {
+              "name": "requisitions.req_line_reporting_total",
+              "label": "Line Total",
+              "description": "Filter reqs above/below $ threshold"
+            },
+            {
+              "name": "requisitions.sum_req_line_reporting_total",
+              "label": "Total Amount",
+              "description": "Filter by total amount"
+            },
+            {
+              "name": "suppliers.name",
+              "label": "Supplier Name",
+              "description": "Filter by supplier name"
+            },
+            {
+              "name": "invoices.supplier_name",
+              "label": "Supplier (invoices view)",
+              "description": "Alternate supplier filter"
+            },
+            {
+              "name": "requested_by_user.id",
+              "label": "Requested By User ID",
+              "description": "Filter by requester user"
+            },
+            {
+              "name": "orders.created_by",
+              "label": "Order Created By",
+              "description": "Filter via orders created_by field"
+            },
+            {
+              "name": "commodities.commodity_name",
+              "label": "Commodity",
+              "description": "Filter by commodity"
+            },
+            {
+              "name": "commodities.name",
+              "label": "Commodity (alt)",
+              "description": "Alternate commodity filter"
+            }
+          ]
+        },
+        "req_approval_and_status": {
+          "description": "Requisition approval workflow — pending buyer action, pending approval, specific approver, open/in-flight. Covers 'how many reqs in pending buyer action', 'reqs pending jonathan jurss approval', 'how many requests do i need to approve'.",
+          "example_queries": [
+            "how many requisitions are currently in pending buyer action status",
+            "how many reqs are pending jonathan jurss approval",
+            "how many requests do i need to approve",
+            "how many reqs are pending approval",
+            "how many requisitions do i have open for buyer action",
+            "how many requisitions did i created in this month"
+          ],
+          "available_dimensions": [
+            {
+              "name": "requisitions.requisition_header_status",
+              "label": "Status",
+              "description": "Current req status"
+            },
+            {
+              "name": "requisitions.req_created_by_name",
+              "label": "Created By Name",
+              "description": "Creator name for self-lookup"
+            },
+            {
+              "name": "requisitions.req_header_created_month",
+              "label": "Created Month",
+              "description": "Month for recency filter"
+            }
+          ],
+          "available_measures": [
+            {
+              "name": "requisitions.count_requisition_header_id",
+              "label": "Req Count",
+              "description": "Count in status"
+            },
+            {
+              "name": "requisitions.sum_req_line_reporting_total",
+              "label": "Total Amount",
+              "description": "Total amount of reqs in status"
+            }
+          ],
+          "available_filters": [
+            {
+              "name": "requisitions.requisition_header_status",
+              "label": "Status",
+              "description": "Filter by status (pending_buyer_action, pending_approval, etc.)"
+            },
+            {
+              "name": "approvals.approver_id",
+              "label": "Approver User ID",
+              "description": "Filter reqs pending a specific approver; use 99999 for self"
+            },
+            {
+              "name": "approvals.status",
+              "label": "Approval Step Status",
+              "description": "Filter by approval step status"
+            },
+            {
+              "name": "requisitions.req_header_created_by",
+              "label": "Created By (User ID)",
+              "description": "Filter by creator"
+            },
+            {
+              "name": "requisitions.req_header_created_month",
+              "label": "Created Month",
+              "description": "Filter by month"
+            },
+            {
+              "name": "suppliers.diversity_status",
+              "label": "Diversity Status",
+              "description": "Filter for diverse suppliers"
+            }
+          ]
+        },
+        "req_cycle_time": {
+          "description": "Requisition-to-PO cycle time — average days by account, which account is slowest.",
+          "example_queries": [
+            "what's the average requisition-to-order cycle time by account?",
+            "which account has the longest po cycle time?"
+          ],
+          "available_dimensions": [
+            {
+              "name": "accounts.name",
+              "label": "Account",
+              "description": "Account to compare cycle times across"
+            }
+          ],
+          "available_measures": [
+            {
+              "name": "requisitions.avg_po_cycle_time",
+              "label": "Avg Req-to-PO Cycle (days)",
+              "description": "Average days from req approval to PO creation"
+            }
+          ],
+          "available_filters": [
+            {
+              "name": "requisitions.req_header_created_year",
+              "label": "Created Year",
+              "description": "Filter by year"
+            }
+          ]
+        },
+        "req_trend_and_volume": {
+          "description": "Requisition volume trends — monthly, YoY comparison, line charts, trend analysis reports.",
+          "example_queries": [
+            "Display monthly requisition total as a line chart with year-over-year comparison",
+            "Show me the trend of requisition submissions over the last 6 months",
+            "Generate an analysis on number of requisitions opened this year"
+          ],
+          "available_dimensions": [
+            {
+              "name": "requisitions.req_header_created_month",
+              "label": "Created Month",
+              "description": "Month for trend"
+            },
+            {
+              "name": "requisitions.req_header_created_quarter",
+              "label": "Created Quarter",
+              "description": "Quarter for trend"
+            },
+            {
+              "name": "requisitions.req_header_created_year",
+              "label": "Created Year",
+              "description": "Year for YoY comparison"
+            }
+          ],
+          "available_measures": [
+            {
+              "name": "requisitions.count_requisition_header_id",
+              "label": "Req Count",
+              "description": "Monthly/quarterly count for trend"
+            },
+            {
+              "name": "requisitions.sum_req_line_reporting_total",
+              "label": "Total Req Spend",
+              "description": "Spend trend over time"
+            }
+          ],
+          "available_filters": [
+            {
+              "name": "requisitions.req_header_created_year",
+              "label": "Created Year",
+              "description": "Filter to specific years"
+            },
+            {
+              "name": "requisitions.req_header_created_month",
+              "label": "Created Month",
+              "description": "Filter to specific months"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "explore": "suppliers",
+      "description": "Supplier master data analytics — status/count, onboarding trends, search/filter, activity & spend, invoice delivery methods. 31 golden queries.",
+      "primary_view": "suppliers",
+      "example_queries": [
+        "how many active suppliers do we have",
+        "what suppliers were onboarded in the last 30 days",
+        "list suppliers with 30 day terms",
+        "find me a view of all suppliers with po transmission methods cxml",
+        "can you show me all suppliers with no purchase orders or invoices in the last 24 months",
+        "who are the top 10 suppliers by spend",
+        "How many suppliers are sending invoices using different delivery methods"
+      ],
+      "query_categories": {
+        "supplier_count_and_status": {
+          "description": "Count suppliers by status — active, inactive, onboarding, linked, total setup in Coupa. Covers 'how many active suppliers', 'how many inactive suppliers', 'how many in onboarding status', 'how many linked suppliers'.",
+          "example_queries": [
+            "how many suppliers are in onboarding status",
+            "how many active suppliers do we have",
+            "how many active suppliers are setup",
+            "how many available suppliers can we raise an order to",
+            "how many suppliers are setup in coupa",
+            "how many suppliers do we have",
+            "how many coupa suppliers does united airlines have",
+            "how many active suppliers",
+            "how many linked suppliers do we have",
+            "How many inactive suppliers we have"
+          ],
+          "available_dimensions": [
+            {
+              "name": "suppliers.name",
+              "label": "Supplier Name",
+              "description": "Supplier name"
+            },
+            {
+              "name": "suppliers.status",
+              "label": "Supplier Status",
+              "description": "Status: active, inactive, onboarding, …"
+            },
+            {
+              "name": "suppliers.coupa_connect_status",
+              "label": "CSP Status",
+              "description": "Coupa Supplier Portal connection status"
+            },
+            {
+              "name": "suppliers.supplier_country",
+              "label": "Country",
+              "description": "Supplier country"
+            }
+          ],
+          "available_measures": [
+            {
+              "name": "suppliers.count_id",
+              "label": "Supplier Count",
+              "description": "Count of distinct suppliers"
+            }
+          ],
+          "available_filters": [
+            {
+              "name": "suppliers.status",
+              "label": "Supplier Status",
+              "description": "Filter by active, inactive, onboarding, etc."
+            },
+            {
+              "name": "suppliers.coupa_connect_status",
+              "label": "CSP Status",
+              "description": "Filter by portal connection status"
+            },
+            {
+              "name": "suppliers.supplier_country",
+              "label": "Country",
+              "description": "Filter by country"
+            }
+          ]
+        },
+        "supplier_onboarding_trend": {
+          "description": "New or recently onboarded suppliers — who was added in a date range, count by month/year. Covers 'what suppliers were onboarded in the last 30 days', 'show me suppliers onboarded in 2020', 'what new suppliers were added in july 2024', 'suppliers created by me'.",
+          "example_queries": [
+            "what suppliers were onboarded in the last 30 days",
+            "show me suppliers onboarded in 2020",
+            "what new suppliers have been added in july of 2024",
+            "suppliers created by me"
+          ],
+          "available_dimensions": [
+            {
+              "name": "suppliers.name",
+              "label": "Supplier Name",
+              "description": "Name of newly onboarded supplier"
+            },
+            {
+              "name": "suppliers.created_date",
+              "label": "Created Date",
+              "description": "Date supplier was onboarded"
+            },
+            {
+              "name": "suppliers.created_month",
+              "label": "Created Month",
+              "description": "Month onboarded"
+            },
+            {
+              "name": "suppliers.created_quarter",
+              "label": "Created Quarter",
+              "description": "Quarter onboarded"
+            },
+            {
+              "name": "suppliers.created_year",
+              "label": "Created Year",
+              "description": "Year onboarded"
+            },
+            {
+              "name": "suppliers.status",
+              "label": "Status",
+              "description": "Supplier status"
+            },
+            {
+              "name": "suppliers.supplier_country",
+              "label": "Country",
+              "description": "Supplier country"
+            }
+          ],
+          "available_measures": [
+            {
+              "name": "suppliers.count_id",
+              "label": "Supplier Count",
+              "description": "Count of newly onboarded suppliers"
+            }
+          ],
+          "available_filters": [
+            {
+              "name": "suppliers.created_date",
+              "label": "Created Date",
+              "description": "Filter by onboarding date"
+            },
+            {
+              "name": "suppliers.created_month",
+              "label": "Created Month",
+              "description": "Filter by onboarding month"
+            },
+            {
+              "name": "suppliers.created_quarter",
+              "label": "Created Quarter",
+              "description": "Filter by onboarding quarter"
+            },
+            {
+              "name": "suppliers.created_year",
+              "label": "Created Year",
+              "description": "Filter by onboarding year"
+            },
+            {
+              "name": "suppliers.created_by",
+              "label": "Created By",
+              "description": "Filter by who created the supplier; use 99999 for self"
+            },
+            {
+              "name": "suppliers.status",
+              "label": "Status",
+              "description": "Filter by status"
+            },
+            {
+              "name": "suppliers.supplier_country",
+              "label": "Country",
+              "description": "Filter by country"
+            }
+          ]
+        },
+        "supplier_search_and_filter": {
+          "description": "Find/filter suppliers by name, content group, payment terms, PO transmission method, contact presence, country, catalog items. Covers 'find supplier containing ignite data', 'list suppliers with 30 day terms', 'suppliers with po method cXML', 'suppliers without a contact', 'which supplier sells copy paper'.",
+          "example_queries": [
+            "show me suppliers containing content group with svb",
+            "can you find supplier with name containing 'ignite data'",
+            "which suppliers can i buy copy paper from",
+            "extract all the supplier with name contains ibm",
+            "which supplier is selling tools",
+            "list suppliers with 30 day terms",
+            "please filter suppliers without a supplier contact",
+            "find me a view of all suppliers with po tranmission methods cxml",
+            "filter suppliers from the us only"
+          ],
+          "available_dimensions": [
+            {
+              "name": "suppliers.name",
+              "label": "Supplier Name",
+              "description": "Name — supports contains/starts-with"
+            },
+            {
+              "name": "supplier_name.name",
+              "label": "Supplier Name (alt)",
+              "description": "Alternate supplier name view"
+            },
+            {
+              "name": "suppliers.content_groups",
+              "label": "Content Groups",
+              "description": "Catalog content groups assigned to supplier"
+            },
+            {
+              "name": "suppliers.coupa_connect_status",
+              "label": "CSP Status",
+              "description": "Portal connection status"
+            },
+            {
+              "name": "suppliers.supplier_country",
+              "label": "Country",
+              "description": "Country of supplier"
+            },
+            {
+              "name": "items.name",
+              "label": "Item Name",
+              "description": "Item/catalog product sold by supplier"
+            }
+          ],
+          "available_measures": [
+            {
+              "name": "suppliers.count_id",
+              "label": "Supplier Count",
+              "description": "Count of matching suppliers"
+            }
+          ],
+          "available_filters": [
+            {
+              "name": "suppliers.name",
+              "label": "Supplier Name",
+              "description": "Filter by name (contains, starts with)"
+            },
+            {
+              "name": "suppliers.content_groups",
+              "label": "Content Groups",
+              "description": "Filter by content group"
+            },
+            {
+              "name": "payment_terms.code",
+              "label": "Payment Terms Code",
+              "description": "Filter by payment term (e.g. NET30, NET60)"
+            },
+            {
+              "name": "orders.po_method",
+              "label": "PO Transmission Method",
+              "description": "Filter by PO method (cXML, email, portal, etc.)"
+            },
+            {
+              "name": "suppliers.supplier_country",
+              "label": "Country",
+              "description": "Filter by country (e.g. US, UK)"
+            },
+            {
+              "name": "suppliers.primary_contact_id",
+              "label": "Primary Contact",
+              "description": "Filter suppliers without a primary contact (IS NULL)"
+            },
+            {
+              "name": "items.name",
+              "label": "Item Name",
+              "description": "Filter suppliers by catalog item/product they sell"
+            }
+          ]
+        },
+        "supplier_activity_and_spend": {
+          "description": "Supplier activity based on PO/invoice history — top suppliers by spend, suppliers with no recent PO/invoice, top by invoice count, invoice hold analysis, invoice delivery methods.",
+          "example_queries": [
+            "can you show me all suppliers with no purchase orders or invoices against them since in the last 24 months",
+            "How many suppliers had spend greater than 1,000,000 in 2025",
+            "Navi, I need a list of top 10 suppliers with highest count of Invoices on Hold in 2025",
+            "Top 10 suppliers with invoices on hold by invoice count",
+            "What is our top 10 spend by supplier",
+            "what is our top 10 suppliers by spend for the 2024",
+            "Who are the top 10 manual invoice suppliers by count",
+            "How many suppliers are sending invoices using different delivery methods"
+          ],
+          "available_dimensions": [
+            {
+              "name": "suppliers.name",
+              "label": "Supplier Name",
+              "description": "Supplier name"
+            },
+            {
+              "name": "invoices.supplier_name",
+              "label": "Supplier Name (invoices view)",
+              "description": "Supplier name via invoices"
+            },
+            {
+              "name": "active_suppliers.last_po_date",
+              "label": "Last PO Date",
+              "description": "Date of supplier's most recent PO"
+            },
+            {
+              "name": "active_suppliers.last_po_month",
+              "label": "Last PO Month",
+              "description": "Month of last PO"
+            },
+            {
+              "name": "active_suppliers.last_po_quarter",
+              "label": "Last PO Quarter",
+              "description": "Quarter of last PO"
+            },
+            {
+              "name": "active_suppliers.last_po_year",
+              "label": "Last PO Year",
+              "description": "Year of last PO"
+            },
+            {
+              "name": "orders.last_invoice_date",
+              "label": "Last Invoice Date",
+              "description": "Date of supplier's last invoice"
+            },
+            {
+              "name": "orders.last_invoice_month",
+              "label": "Last Invoice Month",
+              "description": "Month of last invoice"
+            },
+            {
+              "name": "orders.last_invoice_year",
+              "label": "Last Invoice Year",
+              "description": "Year of last invoice"
+            },
+            {
+              "name": "invoices.document_delivery_id",
+              "label": "Invoice Delivery Method",
+              "description": "How invoices are delivered (manual, cXML, email, etc.)"
+            }
+          ],
+          "available_measures": [
+            {
+              "name": "invoices.sum_invoice_line_reporting_total",
+              "label": "Total Invoice Spend",
+              "description": "Total spend per supplier"
+            },
+            {
+              "name": "invoices.count_invoice_header_id",
+              "label": "Invoice Count",
+              "description": "Number of invoices from supplier"
+            },
+            {
+              "name": "suppliers.count_id",
+              "label": "Supplier Count",
+              "description": "Count of suppliers matching criteria"
+            }
+          ],
+          "available_filters": [
+            {
+              "name": "active_suppliers.last_po_date",
+              "label": "Last PO Date",
+              "description": "Filter by when supplier last had a PO"
+            },
+            {
+              "name": "active_suppliers.last_po_month",
+              "label": "Last PO Month",
+              "description": "Filter by last PO month"
+            },
+            {
+              "name": "active_suppliers.last_po_quarter",
+              "label": "Last PO Quarter",
+              "description": "Filter by last PO quarter"
+            },
+            {
+              "name": "active_suppliers.last_po_year",
+              "label": "Last PO Year",
+              "description": "Filter by last PO year"
+            },
+            {
+              "name": "last_invoice_date",
+              "label": "Last Invoice Date (alt)",
+              "description": "Alternate last invoice date field"
+            },
+            {
+              "name": "last_invoice_month",
+              "label": "Last Invoice Month (alt)",
+              "description": "Alternate last invoice month"
+            },
+            {
+              "name": "invoices.invoice_year",
+              "label": "Invoice Year",
+              "description": "Filter spend by year"
+            },
+            {
+              "name": "invoices.invoice_month",
+              "label": "Invoice Month",
+              "description": "Filter spend by month"
+            },
+            {
+              "name": "invoices.status",
+              "label": "Invoice Status",
+              "description": "Filter by invoice status (e.g. on_hold)"
+            },
+            {
+              "name": "invoices.invoice_adoption_status",
+              "label": "Invoice Adoption Status",
+              "description": "Filter by invoice adoption tier"
+            },
+            {
+              "name": "commodities.commodity_name",
+              "label": "Commodity",
+              "description": "Filter by commodity"
+            },
+            {
+              "name": "commodities.name",
+              "label": "Commodity (alt)",
+              "description": "Alternate commodity name filter"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "explore": "contracts",
+      "description": "Contract management — count/status, creators, supplier-linked contracts, commodity contract spend, and expiry tracking. 14 golden queries.",
+      "primary_view": "contracts",
+      "example_queries": [
+        "how many active contracts",
+        "who are the top 10 contract creators by number of contracts?",
+        "which commodities are taking up the most contract spend right now?",
+        "which suppliers have the most active contracts?",
+        "how many contracts are expiring in the next 12 months?"
+      ],
+      "query_categories": {
+        "contract_count_and_search": {
+          "description": "Count or find contracts — by status, creator, supplier, type, amendment. Covers 'how many active contracts', 'how many contracts can be amended', 'show contracts with supplier padro ltd', 'top 10 contract creators', 'top 10 suppliers with most contracts'.",
+          "example_queries": [
+            "how many active contracts",
+            "show me how many contracts i have",
+            "how many contracts can be amended",
+            "how many contracts have been published with international business machines",
+            "create a contract report where supplier is anesh jagtiani",
+            "create a contract report where supplier is test cra supplier",
+            "show me all contract with supplier padro ltd",
+            "who are the top 10 contract creators by number of contracts?",
+            "how many contracts has each contract creator initiated in the past 12 months?",
+            "which suppliers have the most active contracts?",
+            "give me a list of the top 10 suppliers with the most contracts."
+          ],
+          "available_dimensions": [
+            {
+              "name": "contracts.name",
+              "label": "Contract Name",
+              "description": "Name of contract"
+            },
+            {
+              "name": "contracts.status",
+              "label": "Status",
+              "description": "Status: active, expired, draft, pending_approval, etc."
+            },
+            {
+              "name": "contracts.contract_type_name",
+              "label": "Contract Type",
+              "description": "Type/category of contract"
+            },
+            {
+              "name": "contracts.contract_term_type",
+              "label": "Term Type",
+              "description": "Fixed, evergreen, etc."
+            },
+            {
+              "name": "contracts.id",
+              "label": "Contract ID",
+              "description": "Internal contract ID"
+            },
+            {
+              "name": "contracts.terminated",
+              "label": "Terminated",
+              "description": "Whether contract is terminated"
+            },
+            {
+              "name": "contracts.submitted_by_id",
+              "label": "Created/Submitted By",
+              "description": "User who created the contract"
+            },
+            {
+              "name": "suppliers.name",
+              "label": "Supplier Name",
+              "description": "Supplier party to contract"
+            },
+            {
+              "name": "supplier_name.name",
+              "label": "Supplier Name (alt)",
+              "description": "Alternate supplier name field"
+            },
+            {
+              "name": "invoices.supplier_name",
+              "label": "Supplier (invoices view)",
+              "description": "Supplier via invoices view"
+            },
+            {
+              "name": "commodities.commodity_name",
+              "label": "Commodity",
+              "description": "Commodity assigned to contract"
+            },
+            {
+              "name": "commodities.name",
+              "label": "Commodity (alt)",
+              "description": "Alternate commodity name"
+            }
+          ],
+          "available_measures": [
+            {
+              "name": "contracts.contract_id",
+              "label": "Contract Count",
+              "description": "Count of distinct contracts"
+            }
+          ],
+          "available_filters": [
+            {
+              "name": "contracts.status",
+              "label": "Status",
+              "description": "Filter by contract status"
+            },
+            {
+              "name": "contracts.amendment_type",
+              "label": "Amendment Type",
+              "description": "Filter by amendment type (filter for 'can be amended')"
+            },
+            {
+              "name": "contracts.submitted_by_id",
+              "label": "Creator User ID",
+              "description": "Filter by who created the contract; use 99999 for self"
+            },
+            {
+              "name": "contracts.created_date",
+              "label": "Created Date",
+              "description": "Filter by contract creation date"
+            },
+            {
+              "name": "contracts.created_month",
+              "label": "Created Month",
+              "description": "Filter by creation month"
+            },
+            {
+              "name": "contracts.created_quarter",
+              "label": "Created Quarter",
+              "description": "Filter by creation quarter"
+            },
+            {
+              "name": "contracts.created_year",
+              "label": "Created Year",
+              "description": "Filter by creation year"
+            },
+            {
+              "name": "contracts.id",
+              "label": "Contract ID",
+              "description": "Filter by specific contract ID"
+            },
+            {
+              "name": "suppliers.name",
+              "label": "Supplier Name",
+              "description": "Filter by supplier name"
+            },
+            {
+              "name": "invoices.supplier_name",
+              "label": "Supplier (invoices view)",
+              "description": "Alternate supplier name filter"
+            }
+          ]
+        },
+        "contract_spend_by_commodity": {
+          "description": "Invoice spend rolled up against contracts, broken down by commodity — top commodities by contract spend.",
+          "example_queries": [
+            "which commodities are taking up the most contract spend right now?",
+            "what are the top 10 commodities by contract spend?"
+          ],
+          "available_dimensions": [
+            {
+              "name": "commodities.commodity_name",
+              "label": "Commodity",
+              "description": "Commodity for contract spend breakdown"
+            },
+            {
+              "name": "commodities.name",
+              "label": "Commodity (alt)",
+              "description": "Alternate commodity name"
+            }
+          ],
+          "available_measures": [
+            {
+              "name": "invoices.sum_invoice_line_reporting_total",
+              "label": "Contract Spend",
+              "description": "Invoice spend attributed to contracts"
+            }
+          ],
+          "available_filters": [
+            {
+              "name": "contracts.status",
+              "label": "Status",
+              "description": "Filter to active contracts"
+            },
+            {
+              "name": "invoices.invoice_year",
+              "label": "Invoice Year",
+              "description": "Filter by year"
+            },
+            {
+              "name": "invoices.invoice_quarter",
+              "label": "Invoice Quarter",
+              "description": "Filter by quarter"
+            }
+          ]
+        },
+        "contract_expiry": {
+          "description": "Contracts expiring in upcoming periods — count or list by end date. Covers 'how many contracts expiring in next 12 months', 'all contracts expiring in next 6 months'.",
+          "example_queries": [
+            "how many contracts are expiring in the next 12 months?",
+            "what are all contracts expiring in the next 6 months."
+          ],
+          "available_dimensions": [
+            {
+              "name": "contracts.name",
+              "label": "Contract Name",
+              "description": "Name of expiring contract"
+            },
+            {
+              "name": "contracts.status",
+              "label": "Status",
+              "description": "Current status"
+            },
+            {
+              "name": "suppliers.name",
+              "label": "Supplier",
+              "description": "Supplier on expiring contract"
+            },
+            {
+              "name": "contracts.end_date",
+              "label": "End Date",
+              "description": "Contract expiry date"
+            },
+            {
+              "name": "contracts.end_month",
+              "label": "End Month",
+              "description": "Expiry month"
+            },
+            {
+              "name": "contracts.end_quarter",
+              "label": "End Quarter",
+              "description": "Expiry quarter"
+            },
+            {
+              "name": "contracts.end_year",
+              "label": "End Year",
+              "description": "Expiry year"
+            }
+          ],
+          "available_measures": [
+            {
+              "name": "contracts.contract_id",
+              "label": "Contract Count",
+              "description": "Count of expiring contracts"
+            }
+          ],
+          "available_filters": [
+            {
+              "name": "contracts.end_date",
+              "label": "End Date",
+              "description": "Filter by expiry date (e.g. in next 6/12 months)"
+            },
+            {
+              "name": "contracts.end_month",
+              "label": "End Month",
+              "description": "Filter by expiry month"
+            },
+            {
+              "name": "contracts.end_quarter",
+              "label": "End Quarter",
+              "description": "Filter by expiry quarter"
+            },
+            {
+              "name": "contracts.end_year",
+              "label": "End Year",
+              "description": "Filter by expiry year"
+            },
+            {
+              "name": "contracts.status",
+              "label": "Status",
+              "description": "Filter active contracts only"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "explore": "expenses",
+      "description": "Employee expense reports — spend totals and cycle time correlation over time. Limited golden dataset coverage (1 query).",
+      "primary_view": "expenses",
+      "example_queries": [
+        "Show me the correlation between expense approval times and amount over the years",
+        "Total employee expense spend by department this quarter",
+        "Policy violation rate by department"
+      ],
+      "query_categories": {
+        "expense_analytics": {
+          "description": "Expense spend totals and cycle time trends over time periods.",
+          "example_queries": [
+            "Show me the correlation between expense approval times and amount over the years"
+          ],
+          "available_dimensions": [
+            {
+              "name": "expenses.expense_date",
+              "label": "Expense Date",
+              "description": "Date of expense"
+            },
+            {
+              "name": "expenses.expense_month",
+              "label": "Expense Month",
+              "description": "Month of expense"
+            },
+            {
+              "name": "expenses.expense_quarter",
+              "label": "Expense Quarter",
+              "description": "Quarter of expense"
+            },
+            {
+              "name": "expenses.expense_year",
+              "label": "Expense Year",
+              "description": "Year of expense"
+            }
+          ],
+          "available_measures": [
+            {
+              "name": "expenses.sum_reporting_total",
+              "label": "Total Expense Amount",
+              "description": "Sum of all expense totals"
+            },
+            {
+              "name": "expenses.avg_expense_cycle_time",
+              "label": "Avg Cycle Time (days)",
+              "description": "Average days from submission to approval"
+            }
+          ],
+          "available_filters": [
+            {
+              "name": "expenses.expense_year",
+              "label": "Expense Year",
+              "description": "Filter by year"
+            },
+            {
+              "name": "expenses.expense_month",
+              "label": "Expense Month",
+              "description": "Filter by month"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "explore": "commodities",
+      "description": "Commodity/category level spend analysis — top commodities by invoice spend. Also used as a join dimension in invoices/orders/contracts.",
+      "primary_view": "commodities",
+      "example_queries": [
+        "what are the top commodity by invoice spend"
+      ],
+      "query_categories": {
+        "commodity_spend_breakdown": {
+          "description": "Invoice spend broken down directly by commodity category.",
+          "example_queries": [
+            "what are the top commodity by invoice spend"
+          ],
+          "available_dimensions": [
+            {
+              "name": "commodities.commodity_name",
+              "label": "Commodity Name",
+              "description": "Primary commodity category name"
+            },
+            {
+              "name": "commodities.name",
+              "label": "Commodity (alt)",
+              "description": "Alternate commodity name field"
+            }
+          ],
+          "available_measures": [
+            {
+              "name": "invoices.sum_invoice_line_reporting_total",
+              "label": "Invoice Spend",
+              "description": "Total invoice spend attributed to commodity"
+            }
+          ],
+          "available_filters": [
+            {
+              "name": "commodities.commodity_name",
+              "label": "Commodity Name",
+              "description": "Filter by commodity"
+            },
+            {
+              "name": "commodities.name",
+              "label": "Commodity (alt)",
+              "description": "Alternate commodity filter"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "explore": "users",
+      "description": "User master data — count by status. Used as a filter source in most other explores (99999 = current user). Limited direct golden queries.",
+      "primary_view": "users",
+      "example_queries": [
+        "how many active users are there"
+      ],
+      "query_categories": {
+        "user_count": {
+          "description": "Count users by status (active, inactive, etc.).",
+          "example_queries": [
+            "how many active users are there"
+          ],
+          "available_dimensions": [],
+          "available_measures": [
+            {
+              "name": "users.count_id",
+              "label": "User Count",
+              "description": "Count of distinct users"
+            }
+          ],
+          "available_filters": [
+            {
+              "name": "users.status",
+              "label": "User Status",
+              "description": "Filter by user status (active, inactive)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "explore": "kpi_dashboards",
+      "description": "Pre-aggregated KPI metric views (turtle:: prefix) optimised for dashboard tiles — single numbers and time-series KPIs. Not suited for row-level analysis.",
+      "primary_view": "turtle::*",
+      "note": "Use only when query asks for a single KPI number or a pre-built KPI chart tile.",
+      "available_kpi_views": {
+        "turtle::quarterly_invoice_spend": {
+          "description": "Quarterly invoice spend trend",
+          "use_for": "Invoice spend trend chart by quarter"
+        },
+        "turtle::quarterly_po_spend": {
+          "description": "Quarterly PO spend trend",
+          "use_for": "PO spend trend chart by quarter"
+        },
+        "turtle::po_backed_spend": {
+          "description": "% of spend backed by POs",
+          "use_for": "PO-backed spend KPI tile"
+        },
+        "turtle::on_contract_po_rate": {
+          "description": "% of POs placed on contract",
+          "use_for": "Contract compliance KPI tile"
+        },
+        "turtle::electronic_invoice_rate": {
+          "description": "Rate of electronic invoicing",
+          "use_for": "E-invoice adoption KPI"
+        },
+        "turtle::electronic_po_rate": {
+          "description": "Rate of electronic PO transmission",
+          "use_for": "E-PO adoption KPI"
+        },
+        "turtle::invoice_cycle_time": {
+          "description": "Invoice processing cycle time in days",
+          "use_for": "Invoice efficiency KPI"
+        },
+        "turtle::po_cycle_time": {
+          "description": "PO cycle time in days",
+          "use_for": "PO efficiency KPI"
+        },
+        "turtle::requisition_cycle_time": {
+          "description": "Requisition approval cycle time in days",
+          "use_for": "Req efficiency KPI"
+        },
+        "turtle::average_number_of_approvers": {
+          "description": "Average approvers per transaction",
+          "use_for": "Approval complexity KPI"
+        },
+        "turtle::in_flight_requisitions": {
+          "description": "Count of in-flight requisitions",
+          "use_for": "Current workload KPI"
+        },
+        "turtle::active_transacting_suppliers": {
+          "description": "Suppliers with transactions in period",
+          "use_for": "Supplier base activity KPI"
+        },
+        "turtle::tail_suppliers": {
+          "description": "Count of tail spend suppliers",
+          "use_for": "Supplier consolidation KPI"
+        },
+        "turtle::top_suppliers": {
+          "description": "Top suppliers by spend",
+          "use_for": "Top supplier concentration chart"
+        },
+        "turtle::top_commodities": {
+          "description": "Top commodities by spend",
+          "use_for": "Spend by commodity chart"
+        },
+        "turtle::top_departments": {
+          "description": "Top departments by spend",
+          "use_for": "Departmental spend chart"
+        },
+        "turtle::contracts_expiring": {
+          "description": "Count of contracts expiring soon",
+          "use_for": "Contract renewal alert KPI"
+        },
+        "turtle::contract_spend_rollup": {
+          "description": "Total spend attributed to contracts",
+          "use_for": "Contract spend summary"
+        },
+        "turtle::po_spend_amount": {
+          "description": "Total PO spend amount",
+          "use_for": "PO spend KPI tile"
+        },
+        "turtle::invoice_channel": {
+          "description": "Invoice volume by channel",
+          "use_for": "Invoice channel mix chart"
+        },
+        "turtle::supplier_rating_breakdown": {
+          "description": "Supplier scorecard rating distribution",
+          "use_for": "Supplier performance distribution"
+        },
+        "turtle::suppliers_csp_status": {
+          "description": "Supplier CSP portal adoption breakdown",
+          "use_for": "CSP adoption chart"
+        },
+        "turtle::suppliers_creation_trend": {
+          "description": "New supplier onboarding trend",
+          "use_for": "Supplier growth trend"
+        },
+        "turtle::supplier_with_contract": {
+          "description": "Suppliers with active contracts vs without",
+          "use_for": "Contract coverage KPI"
+        }
+      },
+      "example_queries": [
+        "Show me the invoice cycle time KPI",
+        "What is the current electronic invoice rate?",
+        "Show PO-backed spend percentage",
+        "How many contracts are expiring soon?"
+      ]
+    }
+  ],
+  "_metadata": {
+    "version": "2.0 - golden dataset driven",
+    "total_fields_in_csv": 13747,
+    "total_unique_views": 256,
+    "golden_dataset_source": "run 15 oct.xlsx",
+    "golden_dataset_rows": 214,
+    "explores_covered": {
+      "invoices": "79 queries → 7 categories",
+      "orders": "53 queries → 5 categories",
+      "requisitions": "34 queries → 4 categories",
+      "suppliers": "31 queries → 4 categories",
+      "contracts": "14 queries → 3 categories",
+      "expenses": "1 query → 1 category",
+      "commodities": "1 query → 1 category",
+      "users": "1 query → 1 category"
+    },
+    "design_principle": "Each category holds ALL dims/measures/filters that any query in that family could need. The downstream LLM selects the relevant subset per query.",
+    "tree_retrieval_guidance": {
+      "level_1": "Explore selection — classify_explore_type chain picks the right explore",
+      "level_2": "Category selection — embed user query vs category descriptions; pick best-matching category",
+      "level_3": "Field selection — LLM picks dims/measures/filters from the matched category (~10-30 fields) rather than searching all 13,747"
+    }
+  }
+}

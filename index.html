@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Analytics Field Tree</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0d1117;
+      color: #e6edf3;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      overflow: hidden;
+    }
+
+    #header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 52px;
+      background: #161b22;
+      border-bottom: 1px solid #30363d;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      gap: 12px;
+      z-index: 100;
+    }
+
+    #header h1 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #e6edf3;
+    }
+
+    #header span {
+      font-size: 12px;
+      color: #8b949e;
+    }
+
+    #legend {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-left: auto;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      color: #8b949e;
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    #hint {
+      position: fixed;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 6px 14px;
+      font-size: 11px;
+      color: #8b949e;
+      z-index: 100;
+    }
+
+    #svg-container {
+      position: fixed;
+      top: 52px;
+      left: 0; right: 0; bottom: 0;
+      overflow: hidden;
+    }
+
+    svg {
+      width: 100%;
+      height: 100%;
+      cursor: grab;
+    }
+
+    svg:active { cursor: grabbing; }
+
+    .link {
+      fill: none;
+      stroke: #30363d;
+      stroke-width: 1.5px;
+    }
+
+    .node circle {
+      cursor: pointer;
+      stroke-width: 2px;
+      transition: r 0.15s ease;
+    }
+
+    .node circle:hover {
+      filter: brightness(1.3);
+    }
+
+    .node text {
+      font-size: 11px;
+      fill: #e6edf3;
+      pointer-events: none;
+      dominant-baseline: middle;
+    }
+
+    .node .collapsed-indicator {
+      font-size: 10px;
+      fill: #8b949e;
+    }
+
+    /* Tooltip */
+    #tooltip {
+      position: fixed;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 12px;
+      max-width: 320px;
+      pointer-events: none;
+      z-index: 200;
+      opacity: 0;
+      transition: opacity 0.15s;
+      line-height: 1.6;
+    }
+
+    #tooltip .tt-name {
+      font-weight: 600;
+      color: #58a6ff;
+      margin-bottom: 4px;
+    }
+
+    #tooltip .tt-type {
+      color: #8b949e;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+
+    #tooltip .tt-desc {
+      color: #c9d1d9;
+    }
+
+    #tooltip .tt-examples {
+      margin-top: 8px;
+      color: #7ee787;
+      font-size: 11px;
+    }
+
+    #tooltip .tt-examples strong {
+      color: #8b949e;
+      display: block;
+      margin-bottom: 2px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="header">
+  <h1>📊 Analytics Field Tree</h1>
+  <span>Click nodes to expand · Click again to collapse</span>
+  <div id="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#1f6feb"></div> Explore</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#388bfd"></div> Category</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#3fb950"></div> Dimension</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#f78166"></div> Measure</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#e3b341"></div> Filter</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#d2a8ff"></div> KPI View</div>
+  </div>
+</div>
+
+<div id="svg-container">
+  <svg id="tree-svg"></svg>
+</div>
+
+<div id="tooltip"></div>
+<div id="hint">Scroll to zoom · Drag to pan · Click node to expand/collapse</div>
+
+<script>
+// ─── Color / size config per node type ───────────────────────────────────────
+const TYPE = {
+  root:        { color: '#e3b341', r: 14, textDx: 18 },
+  explore:     { color: '#1f6feb', r: 11, textDx: 15 },
+  category:    { color: '#388bfd', r: 8,  textDx: 12 },
+  dimGroup:    { color: '#1a7f37', r: 6,  textDx: 10 },
+  measGroup:   { color: '#da3633', r: 6,  textDx: 10 },
+  filterGroup: { color: '#b08800', r: 6,  textDx: 10 },
+  dimension:   { color: '#3fb950', r: 5,  textDx: 9  },
+  measure:     { color: '#f78166', r: 5,  textDx: 9  },
+  filter:      { color: '#e3b341', r: 5,  textDx: 9  },
+  kpiView:     { color: '#d2a8ff', r: 6,  textDx: 10 },
+};
+
+// ─── Build tree data from JSON ────────────────────────────────────────────────
+function buildTree(json) {
+  const root = { name: 'Analytics', type: 'root', children: [] };
+
+  json.Analytics.forEach(exploreObj => {
+    if (exploreObj.explore === 'kpi_dashboards') {
+      // Special KPI node
+      const kpiNode = {
+        name: 'kpi_dashboards',
+        type: 'explore',
+        description: exploreObj.description,
+        children: []
+      };
+      Object.entries(exploreObj.available_kpi_views || {}).forEach(([k, v]) => {
+        kpiNode.children.push({
+          name: k.replace('turtle::', ''),
+          fullName: k,
+          type: 'kpiView',
+          description: v.description,
+          useFor: v.use_for,
+        });
+      });
+      root.children.push(kpiNode);
+      return;
+    }
+
+    const exploreNode = {
+      name: exploreObj.explore,
+      type: 'explore',
+      description: exploreObj.description,
+      primaryView: exploreObj.primary_view,
+      examples: exploreObj.example_queries ? Object.values(exploreObj.example_queries) : [],
+      children: []
+    };
+
+    const cats = exploreObj.query_categories || {};
+    Object.entries(cats).forEach(([catName, catObj]) => {
+      const catNode = {
+        name: catName,
+        type: 'category',
+        description: catObj.description,
+        examples: catObj.example_queries ? Object.values(catObj.example_queries) : [],
+        children: []
+      };
+
+      const dims = catObj.available_dimensions || [];
+      const meas = catObj.available_measures || [];
+
+      if (dims.length > 0) {
+        const dg = {
+          name: `Dimensions (${dims.length})`,
+          type: 'dimGroup',
+          children: dims.map(d => ({
+            name: d.name,
+            label: d.label,
+            type: 'dimension',
+            description: d.description,
+          }))
+        };
+        catNode.children.push(dg);
+      }
+
+      if (meas.length > 0) {
+        const mg = {
+          name: `Measures (${meas.length})`,
+          type: 'measGroup',
+          children: meas.map(m => ({
+            name: m.name,
+            label: m.label,
+            type: 'measure',
+            description: m.description,
+          }))
+        };
+        catNode.children.push(mg);
+      }
+
+      const filts = catObj.available_filters || [];
+      if (filts.length > 0) {
+        const fg = {
+          name: `Filters (${filts.length})`,
+          type: 'filterGroup',
+          children: filts.map(f => ({
+            name: f.name,
+            label: f.label,
+            type: 'filter',
+            description: f.description,
+          }))
+        };
+        catNode.children.push(fg);
+      }
+
+      exploreNode.children.push(catNode);
+    });
+
+    root.children.push(exploreNode);
+  });
+
+  return root;
+}
+
+// ─── D3 Tree rendering ────────────────────────────────────────────────────────
+const svg = d3.select('#tree-svg');
+const g   = svg.append('g');
+
+// Zoom + pan
+svg.call(
+  d3.zoom()
+    .scaleExtent([0.1, 3])
+    .on('zoom', e => g.attr('transform', e.transform))
+);
+
+const duration = 400;
+let nodeIdCounter = 0;
+
+function diagonal(s, d) {
+  return `M${s.y},${s.x}
+          C${(s.y + d.y) / 2},${s.x}
+           ${(s.y + d.y) / 2},${d.x}
+           ${d.y},${d.x}`;
+}
+
+function truncate(str, max = 28) {
+  return str.length > max ? str.slice(0, max) + '…' : str;
+}
+
+function truncateLeaf(str, max = 46) {
+  return str.length > max ? str.slice(0, max) + '…' : str;
+}
+
+// Collapse all children of a node
+function collapse(d) {
+  if (d.children) {
+    d._children = d.children;
+    d._children.forEach(collapse);
+    d.children = null;
+  }
+}
+
+let rootNode;
+
+// How many example lines to show inline per node type
+function inlineExamples(d) {
+  const type = d.data.type;
+  if (type === 'explore' || type === 'category') {
+    return (d.data.examples || []).slice(0, 3);
+  }
+  return [];
+}
+
+// Vertical space per node: base + (examples * line-height)
+function nodeHeight(d) {
+  const ex = inlineExamples(d);
+  return ex.length > 0 ? 18 + ex.length * 13 : 22;
+}
+
+function update(source) {
+  // Dynamic tree layout with variable node sizes
+  const treeLayout = d3.tree()
+    .nodeSize([55, 280])
+    .separation((a, b) => {
+      const ha = nodeHeight(a);
+      const hb = nodeHeight(b);
+      return (ha + hb) / 2 / 55 + 0.15;
+    });
+  treeLayout(rootNode);
+
+  const nodes = rootNode.descendants();
+  const links = rootNode.links();
+
+  // ── Links ──
+  const link = g.selectAll('.link').data(links, d => d.target.id);
+
+  const linkEnter = link.enter()
+    .insert('path', 'g')
+    .attr('class', 'link')
+    .attr('d', () => {
+      const o = { x: source.x0 ?? source.x, y: source.y0 ?? source.y };
+      return diagonal(o, o);
+    });
+
+  link.merge(linkEnter)
+    .transition().duration(duration)
+    .attr('d', d => diagonal(d.source, d.target));
+
+  link.exit()
+    .transition().duration(duration)
+    .attr('d', () => {
+      const o = { x: source.x, y: source.y };
+      return diagonal(o, o);
+    })
+    .remove();
+
+  // ── Nodes ──
+  const node = g.selectAll('g.node').data(nodes, d => d.id || (d.id = ++nodeIdCounter));
+
+  const nodeEnter = node.enter()
+    .append('g')
+    .attr('class', 'node')
+    .attr('transform', () => `translate(${source.y0 ?? source.y},${source.x0 ?? source.x})`)
+    .style('opacity', 0)
+    .on('click', (event, d) => {
+      event.stopPropagation();
+      if (d.children) {
+        d._children = d.children;
+        d.children = null;
+      } else if (d._children) {
+        d.children = d._children;
+        d._children = null;
+      }
+      update(d);
+    })
+    .on('mouseover', (event, d) => showTooltip(event, d))
+    .on('mousemove', (event) => moveTooltip(event))
+    .on('mouseout', () => hideTooltip());
+
+  const cfg = d => TYPE[d.data.type] || TYPE.dimension;
+
+  nodeEnter.append('circle')
+    .attr('r', 0)
+    .attr('fill', d => cfg(d).color)
+    .attr('stroke', d => d3.color(cfg(d).color).darker(0.8))
+    .attr('stroke-width', 2);
+
+  // Node name label
+  nodeEnter.append('text')
+    .attr('class', 'node-name')
+    .attr('dx', d => cfg(d).textDx)
+    .attr('dy', d => inlineExamples(d).length > 0 ? '-0.6em' : '0.31em')
+    .text(d => ['dimension','measure','filter'].includes(d.data.type) ? truncateLeaf(d.data.name, 46) : truncate(d.data.name, 32))
+    .attr('fill', '#e6edf3')
+    .style('font-size', d => ['dimension','measure','filter','kpiView'].includes(d.data.type) ? '10px' : '12px')
+    .style('font-weight', d => ['explore','root'].includes(d.data.type) ? '600' : 'normal');
+
+  // Example query lines (inline)
+  nodeEnter.each(function(d) {
+    const examples = inlineExamples(d);
+    if (!examples.length) return;
+    const g = d3.select(this);
+    const dx = cfg(d).textDx;
+    examples.forEach((ex, i) => {
+      g.append('text')
+        .attr('class', 'example-line')
+        .attr('dx', dx)
+        .attr('dy', `${(i + 1) * 13 - 2}px`)
+        .text('• ' + truncate(ex, 42))
+        .attr('fill', '#8b949e')
+        .style('font-size', '9px');
+    });
+  });
+
+  // Collapsed indicator
+  nodeEnter.append('text')
+    .attr('class', 'collapsed-indicator')
+    .attr('dx', d => -(cfg(d).r + 8))
+    .attr('dy', '0.31em')
+    .attr('text-anchor', 'end')
+    .style('font-size', '9px')
+    .attr('fill', '#8b949e');
+
+  const nodeUpdate = node.merge(nodeEnter)
+    .transition().duration(duration)
+    .attr('transform', d => `translate(${d.y},${d.x})`)
+    .style('opacity', 1);
+
+  nodeUpdate.select('circle')
+    .attr('r', d => cfg(d).r)
+    .attr('fill', d => d._children ? d3.color(cfg(d).color).darker(0.5) : cfg(d).color);
+
+  // Update collapsed indicator
+  node.merge(nodeEnter).select('.collapsed-indicator')
+    .text(d => d._children ? `▶ ${d._children.length}` : '');
+
+  node.exit()
+    .transition().duration(duration)
+    .attr('transform', () => `translate(${source.y},${source.x})`)
+    .style('opacity', 0)
+    .remove();
+
+  // Save positions
+  nodes.forEach(d => { d.x0 = d.x; d.y0 = d.y; });
+}
+
+// ─── Tooltip ──────────────────────────────────────────────────────────────────
+const tooltip = document.getElementById('tooltip');
+
+function showTooltip(event, d) {
+  const data = d.data;
+  let html = `<div class="tt-name">${data.name}</div>`;
+  html += `<div class="tt-type">${data.type.replace('Group','')}</div>`;
+
+  if (data.label) {
+    html += `<div style="color:#8b949e;font-size:10px;margin-bottom:4px">Label: ${data.label}</div>`;
+  }
+
+  if (data.description) {
+    html += `<div class="tt-desc">${data.description}</div>`;
+  }
+
+  if (data.useFor) {
+    html += `<div style="color:#d2a8ff;margin-top:6px;font-size:11px">Use for: ${data.useFor}</div>`;
+  }
+
+  if (data.examples && data.examples.length > 0) {
+    html += `<div class="tt-examples"><strong>Example queries:</strong>`;
+    data.examples.slice(0, 3).forEach(ex => {
+      html += `<div>• ${ex}</div>`;
+    });
+    html += `</div>`;
+  }
+
+  if (d._children) {
+    const count = d._children.length;
+    html += `<div style="margin-top:6px;color:#8b949e;font-size:10px">▶ ${count} hidden child${count>1?'ren':''} — click to expand</div>`;
+  }
+
+  tooltip.innerHTML = html;
+  tooltip.style.opacity = '1';
+  moveTooltip(event);
+}
+
+function moveTooltip(event) {
+  const x = event.clientX + 14;
+  const y = event.clientY - 10;
+  const tw = tooltip.offsetWidth;
+  const th = tooltip.offsetHeight;
+  const ww = window.innerWidth;
+  const wh = window.innerHeight;
+  tooltip.style.left = (x + tw > ww ? x - tw - 28 : x) + 'px';
+  tooltip.style.top  = (y + th > wh ? y - th : y) + 'px';
+}
+
+function hideTooltip() {
+  tooltip.style.opacity = '0';
+}
+
+// ─── Load + Init ──────────────────────────────────────────────────────────────
+fetch('./explore_query_mapping.json')
+  .then(r => r.json())
+  .then(json => {
+    const treeData = buildTree(json);
+    rootNode = d3.hierarchy(treeData);
+
+    // Start with all children collapsed except root
+    rootNode.children.forEach(collapse);
+
+    rootNode.x0 = 0;
+    rootNode.y0 = 0;
+
+    // Initial pan to center-left
+    const svgEl = document.getElementById('tree-svg');
+    const w = svgEl.clientWidth;
+    const h = svgEl.clientHeight;
+    g.attr('transform', `translate(80, ${h / 2})`);
+    svg.call(
+      d3.zoom()
+        .scaleExtent([0.1, 3])
+        .on('zoom', e => g.attr('transform', e.transform))
+        .transform,
+      d3.zoomIdentity.translate(80, h / 2)
+    );
+
+    update(rootNode);
+  })
+  .catch(err => {
+    document.body.innerHTML = `<div style="padding:40px;color:#f78166">
+      <h2>Could not load explore_query_mapping.json</h2>
+      <p style="margin-top:10px;color:#8b949e">Make sure you are running a local HTTP server in the same directory.</p>
+      <pre style="margin-top:10px;background:#161b22;padding:12px;border-radius:6px">cd ai_assistant/utils/analytics_agent\npython3 -m http.server 8765</pre>
+      <p style="margin-top:10px;color:#8b949e">Error: ${err.message}</p>
+    </div>`;
+  });
+</script>
+</body>
+</html>

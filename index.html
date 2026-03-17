@@ -161,6 +161,43 @@
       display: block;
       margin-bottom: 2px;
     }
+
+    /* ── ragStep label style ── */
+    .ragstep-label { font-style: italic; }
+
+    /* ── Schema Modal ── */
+    #schema-modal {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.72); z-index: 500;
+      align-items: center; justify-content: center;
+    }
+    #schema-modal.open { display: flex; }
+    #schema-modal-inner {
+      background: #161b22; border: 1px solid #30363d; border-radius: 10px;
+      padding: 24px 28px 28px; position: relative; min-width: 360px;
+    }
+    #schema-modal-inner h2 {
+      font-size: 14px; font-weight: 600; color: #bc8cff;
+      margin-bottom: 18px; border-bottom: 1px solid #30363d; padding-bottom: 10px;
+    }
+    #schema-close {
+      position: absolute; top: 12px; right: 16px;
+      background: none; border: 1px solid #484f58; color: #8b949e;
+      border-radius: 4px; font-size: 17px; cursor: pointer;
+      padding: 0 8px; line-height: 26px;
+    }
+    #schema-close:hover { color: #e6edf3; border-color: #8b949e; }
+    .rag-step-box {
+      background: #0f0a1a; border: 1.5px solid #6e40c9; border-radius: 6px;
+      padding: 10px 14px; font-size: 12px; color: #e6edf3;
+      display: flex; align-items: flex-start; gap: 10px;
+    }
+    .rag-step-box .step-num {
+      font-size: 15px; font-weight: 700; color: #bc8cff; flex-shrink: 0; line-height: 1.4;
+    }
+    .rag-step-box .step-body strong { color: #bc8cff; display: block; margin-bottom: 2px; }
+    .rag-step-box .step-body small { color: #8b949e; font-size: 10px; line-height: 1.5; }
+    .rag-arrow { text-align: center; color: #6e40c9; font-size: 18px; margin: 2px 0; }
   </style>
 </head>
 <body>
@@ -173,7 +210,8 @@
     <div class="legend-item"><div class="legend-dot" style="background:#388bfd"></div> Category</div>
     <div class="legend-item"><div class="legend-dot" style="background:#3fb950"></div> Dimension</div>
     <div class="legend-item"><div class="legend-dot" style="background:#f78166"></div> Measure</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#e3b341"></div> Filter</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#bc8cff"></div> Miscellaneous</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#f0883e"></div> Build Query</div>
     <div class="legend-item"><div class="legend-dot" style="background:#d2a8ff"></div> KPI View</div>
   </div>
 </div>
@@ -182,22 +220,63 @@
   <svg id="tree-svg"></svg>
 </div>
 
+<!-- Schema Subagent Modal -->
+<div id="schema-modal">
+  <div id="schema-modal-inner">
+    <button id="schema-close" title="Close">×</button>
+    <h2>✦ Schema Subagent — RAG Pipeline</h2>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div class="rag-step-box">
+        <div class="step-num">①</div>
+        <div class="step-body">
+          <strong>Field Guess by LLM</strong>
+          <small>LLM infers likely field names from the user query context before any vector search.</small>
+        </div>
+      </div>
+      <div class="rag-arrow">↓</div>
+      <div class="rag-step-box">
+        <div class="step-num">②</div>
+        <div class="step-body">
+          <strong>Search Fields in Explore</strong>
+          <small>Search among all fields in the already-decided explore (decided by the parent category node).</small>
+        </div>
+      </div>
+      <div class="rag-arrow">↓</div>
+      <div class="rag-step-box">
+        <div class="step-num">③</div>
+        <div class="step-body">
+          <strong>Fetch Top K Dims &amp; Measures</strong>
+          <small>Vector similarity match against guessed field names to surface the most relevant dimensions and measures.</small>
+        </div>
+      </div>
+      <div class="rag-arrow">↓</div>
+      <div class="rag-step-box">
+        <div class="step-num">④</div>
+        <div class="step-body">
+          <strong>Generate Looker Query</strong>
+          <small>LLM constructs the final Looker explore query using the selected dimensions and measures.</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div id="tooltip"></div>
 <div id="hint">Scroll to zoom · Drag to pan · Click node to expand/collapse</div>
 
 <script>
 // ─── Color / size config per node type ───────────────────────────────────────
 const TYPE = {
-  root:        { color: '#e3b341', r: 14, textDx: 18 },
-  explore:     { color: '#1f6feb', r: 11, textDx: 15 },
-  category:    { color: '#388bfd', r: 8,  textDx: 12 },
-  dimGroup:    { color: '#1a7f37', r: 6,  textDx: 10 },
-  measGroup:   { color: '#da3633', r: 6,  textDx: 10 },
-  filterGroup: { color: '#b08800', r: 6,  textDx: 10 },
-  dimension:   { color: '#3fb950', r: 5,  textDx: 9  },
-  measure:     { color: '#f78166', r: 5,  textDx: 9  },
-  filter:      { color: '#e3b341', r: 5,  textDx: 9  },
-  kpiView:     { color: '#d2a8ff', r: 6,  textDx: 10 },
+  root:          { color: '#e3b341', r: 14, textDx: 18 },
+  explore:       { color: '#1f6feb', r: 11, textDx: 15 },
+  category:      { color: '#388bfd', r: 8,  textDx: 12 },
+  dimGroup:      { color: '#1a7f37', r: 6,  textDx: 10 },
+  measGroup:     { color: '#da3633', r: 6,  textDx: 10 },
+  miscellaneous:  { color: '#bc8cff', r: 9,  textDx: 13 },
+  queryBuilder:   { color: '#f0883e', r: 0,  textDx: 0  },
+  dimension:      { color: '#3fb950', r: 5,  textDx: 9  },
+  measure:        { color: '#f78166', r: 5,  textDx: 9  },
+  kpiView:        { color: '#d2a8ff', r: 6,  textDx: 10 },
 };
 
 // ─── Build tree data from JSON ────────────────────────────────────────────────
@@ -237,6 +316,18 @@ function buildTree(json) {
 
     const cats = exploreObj.query_categories || {};
     Object.entries(cats).forEach(([catName, catObj]) => {
+      // ── Miscellaneous node: leaf node — click shows Schema Subagent box diagram ──
+      if (catObj.type === 'miscellaneous') {
+        exploreNode.children.push({
+          name: '✦ Miscellaneous',
+          type: 'miscellaneous',
+          description: catObj.description || 'Schema Subagent RAG pipeline.',
+          examples: [],
+          children: null,
+        });
+        return;
+      }
+
       const catNode = {
         name: catName,
         type: 'category',
@@ -248,48 +339,40 @@ function buildTree(json) {
       const dims = catObj.available_dimensions || [];
       const meas = catObj.available_measures || [];
 
+      // queryBuilder lives as the LAST CHILD of measGroup (same depth as dim/meas leaves)
+      // so it appears AFTER all dimension and measure leaves.
+      // If no measures exist, it lives as last child of dimGroup instead.
+      const qbNode = {
+        name: '\u2699 Build Looker Query',
+        type: 'queryBuilder',
+        description: 'Select required dimensions & measures, then construct the Looker explore query.',
+        examples: [],
+        children: null,
+      };
+
       if (dims.length > 0) {
-        const dg = {
+        catNode.children.push({
           name: `Dimensions (${dims.length})`,
           type: 'dimGroup',
-          children: dims.map(d => ({
-            name: d.name,
-            label: d.label,
-            type: 'dimension',
-            description: d.description,
-          }))
-        };
-        catNode.children.push(dg);
+          children: [
+            ...dims.map(d => ({ name: d.name, label: d.label, type: 'dimension', description: d.description })),
+            ...(meas.length === 0 ? [qbNode] : []),
+          ]
+        });
       }
 
       if (meas.length > 0) {
-        const mg = {
+        catNode.children.push({
           name: `Measures (${meas.length})`,
           type: 'measGroup',
-          children: meas.map(m => ({
-            name: m.name,
-            label: m.label,
-            type: 'measure',
-            description: m.description,
-          }))
-        };
-        catNode.children.push(mg);
+          children: [
+            ...meas.map(m => ({ name: m.name, label: m.label, type: 'measure', description: m.description })),
+            qbNode,
+          ]
+        });
       }
 
-      const filts = catObj.available_filters || [];
-      if (filts.length > 0) {
-        const fg = {
-          name: `Filters (${filts.length})`,
-          type: 'filterGroup',
-          children: filts.map(f => ({
-            name: f.name,
-            label: f.label,
-            type: 'filter',
-            description: f.description,
-          }))
-        };
-        catNode.children.push(fg);
-      }
+      // ── No filterGroup — filters have been merged into dims/measures ──
 
       exploreNode.children.push(catNode);
     });
@@ -329,9 +412,24 @@ function truncateLeaf(str, max = 46) {
   return str.length > max ? str.slice(0, max) + '…' : str;
 }
 
-// Collapse all children of a node
+// Collapse all children of a node.
+// For measGroup/dimGroup: keep qbNode as the only visible child (State A),
+// so the ⚙ box is always visible even when the group is "collapsed".
 function collapse(d) {
-  if (d.children) {
+  if (!d.children) return;
+  if (d.data.type === 'measGroup' || d.data.type === 'dimGroup') {
+    const qbIdx = d.children.findIndex(c => c.data.type === 'queryBuilder');
+    if (qbIdx !== -1) {
+      const qb = d.children.splice(qbIdx, 1)[0]; // pull qb out
+      d._children = d.children;                  // hide real leaves
+      d._children.forEach(collapse);
+      d.children = [qb];                          // keep only qb visible
+    } else {
+      d._children = d.children;
+      d._children.forEach(collapse);
+      d.children = null;
+    }
+  } else {
     d._children = d.children;
     d._children.forEach(collapse);
     d.children = null;
@@ -402,6 +500,52 @@ function update(source) {
     .style('opacity', 0)
     .on('click', (event, d) => {
       event.stopPropagation();
+      // Miscellaneous node → show Schema Subagent RAG box diagram
+      if (d.data.type === 'miscellaneous') {
+        document.getElementById('schema-modal').classList.add('open');
+        return;
+      }
+      // queryBuilder is informational — no expand/collapse
+      if (d.data.type === 'queryBuilder') return;
+
+      // ── Special expand/collapse for measGroup / dimGroup ──
+      // State A (collapsed): d._children = real leaves, d.children = [qbNode]
+      // State B (expanded):  d.children = real leaves, last leaf has qbNode as child
+      if (d.data.type === 'measGroup' || d.data.type === 'dimGroup') {
+        if (d._children && d._children.length > 0) {
+          // A → B: restore real leaves, push qb one level deeper (child of last leaf)
+          const qb = d.children ? d.children.find(c => c.data.type === 'queryBuilder') : null;
+          d.children = d._children;   // restore
+          d._children = null;
+          if (qb) {
+            // Remove qb from d.children (it shouldn't be there after restore, just safety)
+            d.children = d.children.filter(c => c.data.type !== 'queryBuilder');
+            const lastLeaf = d.children[d.children.length - 1];
+            if (lastLeaf) {
+              if (!lastLeaf.children) lastLeaf.children = [];
+              lastLeaf.children.push(qb);
+              qb.parent = lastLeaf;
+            }
+          }
+        } else if (d.children) {
+          // B → A: pull qb back up, stash real leaves in _children
+          const lastLeaf = d.children.filter(c => c.data.type !== 'queryBuilder').at(-1);
+          let qb = null;
+          if (lastLeaf && lastLeaf.children) {
+            const qi = lastLeaf.children.findIndex(c => c.data.type === 'queryBuilder');
+            if (qi !== -1) {
+              qb = lastLeaf.children.splice(qi, 1)[0];
+              if (!lastLeaf.children.length) lastLeaf.children = null;
+            }
+          }
+          d._children = d.children;
+          d.children = qb ? [qb] : null;
+          if (qb) qb.parent = d;
+        }
+        update(d);
+        return;
+      }
+
       if (d.children) {
         d._children = d.children;
         d.children = null;
@@ -423,8 +567,32 @@ function update(source) {
     .attr('stroke', d => d3.color(cfg(d).color).darker(0.8))
     .attr('stroke-width', 2);
 
-  // Node name label
-  nodeEnter.append('text')
+  // ── queryBuilder: render as a styled rect box (not a circle) ──
+  nodeEnter.filter(d => d.data.type === 'queryBuilder')
+    .append('rect')
+    .attr('class', 'qb-box')
+    .attr('x', 10).attr('y', -14)
+    .attr('width', 220).attr('height', 28)
+    .attr('rx', 5)
+    .attr('fill', '#1e0d02')
+    .attr('stroke', '#f0883e')
+    .attr('stroke-width', 1.5);
+
+  nodeEnter.filter(d => d.data.type === 'queryBuilder')
+    .append('text')
+    .attr('class', 'qb-label')
+    .attr('x', 120).attr('y', 0)
+    .attr('text-anchor', 'middle')
+    .attr('dominant-baseline', 'middle')
+    .attr('fill', '#f0883e')
+    .style('font-size', '10.5px')
+    .style('font-weight', '600')
+    .style('pointer-events', 'none')
+    .text('⚙ Select Dims & Measures → Build Looker Query');
+
+  // Node name label (skip for queryBuilder — it renders its own label)
+  nodeEnter.filter(d => d.data.type !== 'queryBuilder')
+    .append('text')
     .attr('class', 'node-name')
     .attr('dx', d => cfg(d).textDx)
     .attr('dy', d => inlineExamples(d).length > 0 ? '-0.6em' : '0.31em')
@@ -480,6 +648,63 @@ function update(source) {
 
   // Save positions
   nodes.forEach(d => { d.x0 = d.x; d.y0 = d.y; });
+
+  // ── Extra dashed links → queryBuilder ──
+  // qb can be at two depths:
+  //   State A (group collapsed): direct child of measGroup/dimGroup
+  //   State B (group expanded):  child of the last measure/dimension leaf
+  // Walk up to the category node from any depth, then draw dashes from all
+  // visible dim/meas leaves (or their collapsed group circle).
+  const extraLinkData = [];
+  nodes.forEach(d => {
+    if (d.data.type !== 'queryBuilder') return;
+
+    // Walk up to find the parent category node
+    let catHierNode = d.parent;
+    while (catHierNode && catHierNode.data.type !== 'category') {
+      catHierNode = catHierNode.parent;
+    }
+    if (!catHierNode) return;
+
+    const allCatChildren = (catHierNode.children || []).concat(catHierNode._children || []);
+
+    allCatChildren.forEach(groupNode => {
+      if (groupNode.data.type !== 'dimGroup' && groupNode.data.type !== 'measGroup') return;
+
+      // Visible real leaves in this group (exclude qbNode)
+      const visibleLeaves = (groupNode.children || []).filter(
+        c => c.data.type === 'dimension' || c.data.type === 'measure'
+      );
+
+      if (visibleLeaves.length > 0) {
+        // Group is expanded → dash from each leaf, except qb's own parent (tree link handles that)
+        visibleLeaves.forEach(leaf => {
+          if (leaf !== d.parent) {
+            extraLinkData.push({ source: leaf, target: d });
+          }
+        });
+      } else {
+        // Group is collapsed → dash from group circle, unless it IS qb's direct parent
+        if (groupNode !== d.parent) {
+          extraLinkData.push({ source: groupNode, target: d });
+        }
+      }
+    });
+  });
+  g.selectAll('.extra-link')
+    .data(extraLinkData)
+    .join(
+      enter => enter.insert('path', 'g')
+        .attr('class', 'extra-link')
+        .attr('fill', 'none')
+        .attr('stroke', '#f0883e')
+        .attr('stroke-width', 1.2)
+        .attr('stroke-dasharray', '5,3')
+        .attr('opacity', 0.55),
+      update => update,
+      exit => exit.remove()
+    )
+    .attr('d', d => diagonal(d.source, d.target));
 }
 
 // ─── Tooltip ──────────────────────────────────────────────────────────────────
@@ -487,6 +712,39 @@ const tooltip = document.getElementById('tooltip');
 
 function showTooltip(event, d) {
   const data = d.data;
+
+  // Special tooltip for miscellaneous node
+  if (data.type === 'miscellaneous') {
+    tooltip.innerHTML = `
+      <div class="tt-name">✦ Miscellaneous</div>
+      <div class="tt-type">Schema Subagent · RAG Pipeline</div>
+      <div class="tt-desc">${data.description}</div>
+      <div style="margin-top:8px;color:#bc8cff;font-size:11px">🖱 Click to view the RAG pipeline diagram</div>`;
+    tooltip.style.opacity = '1';
+    moveTooltip(event);
+    return;
+  }
+
+  if (data.type === 'ragStep') {
+    tooltip.innerHTML = `
+      <div class="tt-name">${data.name}</div>
+      <div class="tt-type">RAG Pipeline Step</div>
+      <div class="tt-desc">${data.description}</div>`;
+    tooltip.style.opacity = '1';
+    moveTooltip(event);
+    return;
+  }
+
+  if (data.type === 'queryBuilder') {
+    tooltip.innerHTML = `
+      <div class="tt-name">⚙ Build Looker Query</div>
+      <div class="tt-type">Query Construction</div>
+      <div class="tt-desc">Selects required dimensions &amp; measures from both sibling groups and constructs the final Looker explore query.</div>`;
+    tooltip.style.opacity = '1';
+    moveTooltip(event);
+    return;
+  }
+
   let html = `<div class="tt-name">${data.name}</div>`;
   html += `<div class="tt-type">${data.type.replace('Group','')}</div>`;
 
@@ -536,6 +794,16 @@ function hideTooltip() {
 }
 
 // ─── Load + Init ──────────────────────────────────────────────────────────────
+
+// Schema modal close handlers
+document.getElementById('schema-close').addEventListener('click', () =>
+  document.getElementById('schema-modal').classList.remove('open'));
+document.getElementById('schema-modal').addEventListener('click', e => {
+  if (e.target === e.currentTarget) document.getElementById('schema-modal').classList.remove('open');
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.getElementById('schema-modal').classList.remove('open');
+});
 fetch('./explore_query_mapping.json')
   .then(r => r.json())
   .then(json => {

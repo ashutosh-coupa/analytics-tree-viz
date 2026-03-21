@@ -165,6 +165,150 @@
     /* ── ragStep label style ── */
     .ragstep-label { font-style: italic; }
 
+    /* ── Query Flow Panel ── */
+    #query-flow-panel {
+      position: fixed;
+      top: 62px;
+      right: 14px;
+      width: 310px;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 14px 16px;
+      z-index: 90;
+      font-size: 12px;
+      max-height: calc(100vh - 82px);
+      overflow-y: auto;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    #query-flow-panel.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(20px);
+    }
+    .qf-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #30363d;
+    }
+    .qf-title { font-size: 12px; font-weight: 600; color: #e6edf3; }
+    .qf-ts { font-size: 9px; color: #484f58; margin-top: 2px; }
+    .qf-step-label {
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: #8b949e;
+      margin-bottom: 3px;
+    }
+    .qf-box {
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 5px;
+      padding: 8px 10px;
+      margin-bottom: 2px;
+      line-height: 1.5;
+    }
+    .qf-box.highlight-explore { border-color: #1f6feb; box-shadow: 0 0 0 1px #1f6feb33; }
+    .qf-box.highlight-family  { border-color: #388bfd; box-shadow: 0 0 0 1px #388bfd33; }
+    .qf-box.highlight-fields  { border-color: #3fb950; box-shadow: 0 0 0 1px #3fb95033; }
+    .qf-box.highlight-query   { border-color: #f0883e; box-shadow: 0 0 0 1px #f0883e33; }
+    .qf-box .qf-name { font-weight: 600; }
+    .qf-box .qf-desc { font-size: 10px; color: #8b949e; margin-top: 2px; }
+    .qf-box .qf-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 5px; }
+    .qf-chip {
+      font-size: 9px;
+      padding: 2px 6px;
+      border-radius: 10px;
+      background: #1c2128;
+      border: 1px solid #30363d;
+      color: #c9d1d9;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .qf-chip.dim  { border-color: #3fb950; color: #3fb950; }
+    .qf-chip.meas { border-color: #f78166; color: #f78166; }
+    .qf-chip.filt { border-color: #d29922; color: #d29922; }
+    .qf-chip.sort { border-color: #bc8cff; color: #bc8cff; }
+    .qf-chip.field { border-color: #f0883e; color: #f0883e; }
+    .qf-arrow {
+      text-align: center;
+      color: #388bfd;
+      font-size: 13px;
+      margin: 4px 0;
+      letter-spacing: 1px;
+    }
+    .qf-lq-section { margin-top: 6px; }
+    .qf-lq-section:first-child { margin-top: 0; }
+    .qf-lq-label {
+      font-size: 9px; text-transform: uppercase; letter-spacing: 0.5px;
+      color: #8b949e; margin-bottom: 3px;
+    }
+    .qf-filter-row {
+      display: flex; align-items: baseline; gap: 5px;
+      font-size: 10px; padding: 3px 0;
+      border-bottom: 1px solid #21262d;
+    }
+    .qf-filter-row:last-child { border-bottom: none; }
+    .qf-filter-key  { color: #58a6ff; flex-shrink: 0; max-width: 50%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .qf-filter-val  { color: #e6edf3; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .qf-copy-btn {
+      float: right; font-size: 9px; padding: 1px 7px;
+      background: none; border: 1px solid #30363d; border-radius: 3px;
+      color: #8b949e; cursor: pointer; margin-top: -2px;
+    }
+    .qf-copy-btn:hover { color: #e6edf3; border-color: #58a6ff; }
+    #qf-refresh {
+      background: none;
+      border: 1px solid #30363d;
+      color: #8b949e;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 13px;
+      padding: 1px 6px;
+      line-height: 20px;
+    }
+    #qf-refresh:hover { color: #58a6ff; border-color: #58a6ff; }
+    #qf-empty {
+      color: #484f58;
+      font-size: 11px;
+      text-align: center;
+      padding: 20px 0 10px;
+    }
+
+    /* ── Path-highlighted nodes in the tree ── */
+    .node.path-explore > circle {
+      stroke: #1f6feb !important;
+      stroke-width: 3.5px !important;
+      filter: drop-shadow(0 0 7px rgba(31,111,235,0.75));
+    }
+    .node.path-family > circle {
+      stroke: #388bfd !important;
+      stroke-width: 3.5px !important;
+      filter: drop-shadow(0 0 7px rgba(56,139,253,0.75));
+    }
+    .node.path-field > circle {
+      stroke: #ffd700 !important;
+      stroke-width: 2.5px !important;
+      filter: drop-shadow(0 0 5px rgba(255,215,0,0.6));
+    }
+    /* ── Animated path link overlay ── */
+    .path-overlay-link {
+      fill: none;
+      stroke: #ffd700;
+      stroke-width: 2.5px;
+      stroke-dasharray: 8 4;
+      opacity: 0.85;
+      animation: dash-march 1s linear infinite;
+    }
+    @keyframes dash-march {
+      to { stroke-dashoffset: -24; }
+    }
+
     /* ── Schema Modal ── */
     #schema-modal {
       display: none; position: fixed; inset: 0;
@@ -205,6 +349,11 @@
 <div id="header">
   <h1>📊 Analytics Field Tree</h1>
   <span>Click nodes to expand · Click again to collapse</span>
+  <button id="toggle-flow-panel" style="
+      margin-left:12px; background:none; border:1px solid #30363d; color:#8b949e;
+      border-radius:5px; cursor:pointer; font-size:11px; padding:3px 10px; line-height:22px;
+      white-space:nowrap;"
+    title="Show / hide query flow">🔍 Query Flow</button>
   <div id="legend">
     <div class="legend-item"><div class="legend-dot" style="background:#1f6feb"></div> Explore</div>
     <div class="legend-item"><div class="legend-dot" style="background:#388bfd"></div> Category</div>
@@ -258,6 +407,20 @@
         </div>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- Query Flow Panel -->
+<div id="query-flow-panel">
+  <div class="qf-header">
+    <div>
+      <div class="qf-title">🔍 Query Flow</div>
+      <div class="qf-ts" id="qf-timestamp"></div>
+    </div>
+    <button id="qf-refresh" title="Reload query_path.json">↻</button>
+  </div>
+  <div id="qf-body">
+    <div id="qf-empty">No query run yet.<br>Run a query then click ↻</div>
   </div>
 </div>
 
@@ -387,12 +550,11 @@ function buildTree(json) {
 const svg = d3.select('#tree-svg');
 const g   = svg.append('g');
 
-// Zoom + pan
-svg.call(
-  d3.zoom()
-    .scaleExtent([0.1, 3])
-    .on('zoom', e => g.attr('transform', e.transform))
-);
+// Zoom + pan (declared here so RAF and panToNode can reuse it)
+const zoomBehavior = d3.zoom()
+  .scaleExtent([0.1, 3])
+  .on('zoom', e => g.attr('transform', e.transform));
+svg.call(zoomBehavior);
 
 const duration = 400;
 let nodeIdCounter = 0;
@@ -816,29 +978,317 @@ fetch('./explore_query_mapping.json')
     rootNode.x0 = 0;
     rootNode.y0 = 0;
 
-    // Initial pan to center-left
-    const svgEl = document.getElementById('tree-svg');
-    const w = svgEl.clientWidth;
-    const h = svgEl.clientHeight;
-    g.attr('transform', `translate(80, ${h / 2})`);
-    svg.call(
-      d3.zoom()
-        .scaleExtent([0.1, 3])
-        .on('zoom', e => g.attr('transform', e.transform))
-        .transform,
-      d3.zoomIdentity.translate(80, h / 2)
-    );
+    // Use requestAnimationFrame so the browser finishes layout before we
+    // read clientHeight — avoids a 0-height SVG on first paint.
+    requestAnimationFrame(() => {
+      const svgEl = document.getElementById('tree-svg');
+      const h = svgEl.clientHeight || window.innerHeight - 52;
 
-    update(rootNode);
+      svg.call(zoomBehavior.transform, d3.zoomIdentity.translate(80, h / 2));
+      update(rootNode);
+      loadQueryPath();
+    });
   })
   .catch(err => {
     document.body.innerHTML = `<div style="padding:40px;color:#f78166">
       <h2>Could not load explore_query_mapping.json</h2>
       <p style="margin-top:10px;color:#8b949e">Make sure you are running a local HTTP server in the same directory.</p>
-      <pre style="margin-top:10px;background:#161b22;padding:12px;border-radius:6px">cd ai_assistant/utils/analytics_agent\npython3 -m http.server 8765</pre>
+      <pre style="margin-top:10px;background:#161b22;padding:12px;border-radius:6px">cd tree_viz\npython3 -m http.server 8765</pre>
       <p style="margin-top:10px;color:#8b949e">Error: ${err.message}</p>
     </div>`;
   });
+
+
+// ─── Query Flow Panel ─────────────────────────────────────────────────────────
+
+document.getElementById('toggle-flow-panel').addEventListener('click', () => {
+  document.getElementById('query-flow-panel').classList.toggle('hidden');
+});
+
+document.getElementById('qf-refresh').addEventListener('click', loadQueryPath);
+
+function loadQueryPath() {
+  fetch('./query_path.json?t=' + Date.now())
+    .then(r => {
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      return r.json();
+    })
+    .then(data => renderQueryFlow(data))
+    .catch(() => {
+      // No file yet — silently leave the empty state
+    });
+}
+
+function renderQueryFlow(data) {
+  document.getElementById('qf-timestamp').textContent = data.timestamp
+    ? new Date(data.timestamp).toLocaleString() : '';
+
+  const dims   = data.dimensions || [];
+  const meas   = data.measures   || [];
+  const lq     = data.looker_query || {};
+  const lqFields  = lq.fields  || [];
+  const lqFilters = lq.filters || {};
+  const lqSorts   = lq.sorts   || [];
+  const lqFilterEntries = Object.entries(lqFilters);
+
+  function chips(items, cls) {
+    return items.map(s => `<span class="qf-chip ${cls}" title="${escHtml(s)}">${escHtml(s)}</span>`).join('');
+  }
+
+  // ── Level-3 field filter entries (from field_selection, NOT final query) ──
+  const fsFilters = data.filters || {};
+  const fsFilterEntries = Object.entries(fsFilters);
+
+  // ── Looker query section ──
+  function lqFilterRows(entries) {
+    if (!entries.length) return '<div style="color:#484f58;font-size:10px">none</div>';
+    return entries.map(([k, v]) =>
+      `<div class="qf-filter-row">
+         <span class="qf-filter-key" title="${escHtml(k)}">${escHtml(k)}</span>
+         <span style="color:#484f58;flex-shrink:0">→</span>
+         <span class="qf-filter-val" title="${escHtml(String(v))}">${escHtml(String(v))}</span>
+       </div>`
+    ).join('');
+  }
+
+  const lqJson = JSON.stringify(lq, null, 2);
+
+  const html = `
+    <div class="qf-step-label">User Query</div>
+    <div class="qf-box" style="border-color:#58a6ff;box-shadow:0 0 0 1px #58a6ff22">
+      <div style="color:#c9d1d9;font-style:italic">"${escHtml(data.user_query)}"</div>
+    </div>
+
+    <div class="qf-arrow">↓ Level 1 — Explore</div>
+
+    <div class="qf-step-label">Explore</div>
+    <div class="qf-box highlight-explore">
+      <div class="qf-name" style="color:#58a6ff">${escHtml(data.explore)}</div>
+    </div>
+
+    <div class="qf-arrow">↓ Level 2 — Category</div>
+
+    <div class="qf-step-label">Family / Category</div>
+    <div class="qf-box highlight-family">
+      <div class="qf-name" style="color:#388bfd">${escHtml(data.family_key)}</div>
+      ${data.family_description ? `<div class="qf-desc">${escHtml(data.family_description.slice(0, 110))}…</div>` : ''}
+    </div>
+
+    <div class="qf-arrow">↓ Level 3 — Fields</div>
+
+    <div class="qf-step-label">Selected Fields</div>
+    <div class="qf-box highlight-fields">
+      ${dims.length ? `<div class="qf-lq-label">Dimensions</div>
+        <div class="qf-chips">${chips(dims, 'dim')}</div>` : ''}
+      ${meas.length ? `<div class="qf-lq-section"><div class="qf-lq-label">Measures</div>
+        <div class="qf-chips">${chips(meas, 'meas')}</div></div>` : ''}
+      ${fsFilterEntries.length ? `<div class="qf-lq-section"><div class="qf-lq-label">Filters (L3)</div>
+        ${lqFilterRows(fsFilterEntries)}</div>` : ''}
+    </div>
+
+    <div class="qf-arrow">↓ Final Looker Query</div>
+
+    <div class="qf-step-label">
+      Looker Query
+      <button class="qf-copy-btn" onclick="copyLookerJson()" title="Copy as JSON">⧉ copy</button>
+    </div>
+    <div class="qf-box highlight-query" id="qf-looker-box">
+      ${lqFields.length ? `
+        <div class="qf-lq-section">
+          <div class="qf-lq-label" style="color:#f0883e">fields (${lqFields.length})</div>
+          <div class="qf-chips">${chips(lqFields, 'field')}</div>
+        </div>` : '<div style="color:#484f58;font-size:10px">No fields</div>'}
+      ${lqFilterEntries.length ? `
+        <div class="qf-lq-section">
+          <div class="qf-lq-label" style="color:#d29922">filters (${lqFilterEntries.length})</div>
+          ${lqFilterRows(lqFilterEntries)}
+        </div>` : ''}
+      ${lqSorts.length ? `
+        <div class="qf-lq-section">
+          <div class="qf-lq-label" style="color:#bc8cff">sorts</div>
+          <div class="qf-chips">${chips(lqSorts, 'sort')}</div>
+        </div>` : ''}
+    </div>
+  `;
+
+  document.getElementById('qf-empty').style.display = 'none';
+  document.getElementById('qf-body').innerHTML = html;
+
+  // stash JSON for copy button
+  window._lastLookerJson = lqJson;
+
+  highlightPathInTree(data);
+}
+
+function copyLookerJson() {
+  if (window._lastLookerJson) {
+    navigator.clipboard.writeText(window._lastLookerJson).then(() => {
+      const btn = document.querySelector('.qf-copy-btn');
+      if (btn) { btn.textContent = '✓ copied'; setTimeout(() => btn.textContent = '⧉ copy', 1500); }
+    }).catch(() => {});
+  }
+}
+
+function escHtml(s) {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+// ── Expand a node, handling dimGroup/measGroup State-A (children=[qb], _children=leaves) ──
+function ensureExpanded(d) {
+  if (d.data.type === 'dimGroup' || d.data.type === 'measGroup') {
+    if (d._children && d._children.length > 0) {
+      // State A → B: restore real leaves, re-attach qb as child of last leaf
+      const qb = d.children ? d.children.find(c => c.data.type === 'queryBuilder') : null;
+      d.children = d._children.filter(c => c.data.type !== 'queryBuilder');
+      d._children = null;
+      if (qb) {
+        const lastLeaf = d.children[d.children.length - 1];
+        if (lastLeaf) {
+          if (!lastLeaf.children) lastLeaf.children = [];
+          if (!lastLeaf.children.find(c => c.data.type === 'queryBuilder')) {
+            lastLeaf.children.push(qb);
+            qb.parent = lastLeaf;
+          }
+        }
+      }
+      return true;
+    }
+    return false; // already expanded (State B) or no _children
+  }
+  // Standard non-group node
+  if (!d.children && d._children) {
+    d.children = d._children;
+    d._children = null;
+    return true;
+  }
+  return false;
+}
+
+function highlightPathInTree(data) {
+  if (!rootNode) return;
+
+  const targetExplore = data.explore;
+  const targetFamily  = data.family_key;
+  // Union of Level-3 selections + final Looker query fields for complete highlighting
+  const lqFields = (data.looker_query?.fields || []);
+  const targetDims = new Set([...(data.dimensions || []), ...lqFields]);
+  const targetMeas = new Set([...(data.measures   || []), ...lqFields]);
+
+  // ── Step 1: expand the explore node ──
+  let exploreNode = null;
+  rootNode.descendants().forEach(d => {
+    if (d.data.type === 'explore' && d.data.name === targetExplore) {
+      exploreNode = d;
+    }
+  });
+  if (!exploreNode) return;
+
+  ensureExpanded(exploreNode);
+  update(rootNode);
+
+  // ── Step 2: after re-render find and expand the family/category node ──
+  let familyNode = null;
+  rootNode.descendants().forEach(d => {
+    if (d.data.type === 'category' && d.data.name === targetFamily) {
+      familyNode = d;
+    }
+  });
+  if (familyNode) {
+    ensureExpanded(familyNode);
+    // Also expand dimGroup and measGroup children
+    (familyNode.children || []).forEach(ch => {
+      if (ch.data.type === 'dimGroup' || ch.data.type === 'measGroup') {
+        ensureExpanded(ch);
+      }
+    });
+    update(rootNode);
+  }
+
+  // ── Step 3: apply highlight CSS classes + draw overlays after animation ──
+  setTimeout(() => {
+    g.selectAll('g.node')
+      .classed('path-explore', d => d.data.type === 'explore' && d.data.name === targetExplore)
+      .classed('path-family',  d => d.data.type === 'category' && d.data.name === targetFamily)
+      .classed('path-field',   d =>
+        (d.data.type === 'dimension' && targetDims.has(d.data.name)) ||
+        (d.data.type === 'measure'   && targetMeas.has(d.data.name))
+      );
+
+    // Collect rendered field nodes that matched the selection
+    const fieldNodes = [];
+    rootNode.descendants().forEach(d => {
+      if (
+        (d.data.type === 'dimension' && targetDims.has(d.data.name)) ||
+        (d.data.type === 'measure'   && targetMeas.has(d.data.name))
+      ) {
+        fieldNodes.push(d);
+      }
+    });
+
+    // ── Step 4: draw animated overlay arrows on path links ──
+    drawPathOverlay(exploreNode, familyNode, fieldNodes);
+
+    // ── Step 5: pan so the explore node is in view ──
+    if (exploreNode) panToNode(exploreNode);
+  }, duration + 50);
+}
+
+function drawPathOverlay(exploreNode, familyNode, fieldNodes) {
+  const pathPairs = [];
+
+  // Root → Explore → Family (main spine)
+  if (exploreNode && exploreNode.parent) {
+    pathPairs.push({ source: exploreNode.parent, target: exploreNode });
+  }
+  if (exploreNode && familyNode) {
+    pathPairs.push({ source: exploreNode, target: familyNode });
+  }
+
+  // Family → group → each selected dim / measure
+  if (familyNode && fieldNodes && fieldNodes.length > 0) {
+    const addedGroupPairs = new Set();
+    fieldNodes.forEach(fieldNode => {
+      const groupNode = fieldNode.parent; // dimGroup or measGroup
+      if (groupNode) {
+        // Family → group (draw once per group)
+        const groupKey = groupNode.data.name;
+        if (!addedGroupPairs.has(groupKey)) {
+          pathPairs.push({ source: familyNode, target: groupNode });
+          addedGroupPairs.add(groupKey);
+        }
+        // Group → field
+        pathPairs.push({ source: groupNode, target: fieldNode });
+      } else {
+        // Field is directly under family (shouldn't happen, but handle gracefully)
+        pathPairs.push({ source: familyNode, target: fieldNode });
+      }
+    });
+  }
+
+  g.selectAll('.path-overlay-link').remove();
+  pathPairs.forEach(pair => {
+    g.insert('path', 'g')
+      .attr('class', 'path-overlay-link')
+      .attr('d', diagonal(pair.source, pair.target))
+      .attr('stroke-dashoffset', 0);
+  });
+}
+
+function panToNode(d) {
+  const svgEl = document.getElementById('tree-svg');
+  const w = svgEl.clientWidth  || window.innerWidth;
+  const h = svgEl.clientHeight || window.innerHeight - 52;
+  const tx = w / 2 - d.y - 80;
+  const ty = h / 2 - d.x;
+  svg.transition().duration(600).call(
+    zoomBehavior.transform,
+    d3.zoomIdentity.translate(tx, ty)
+  );
+}
 </script>
 </body>
 </html>

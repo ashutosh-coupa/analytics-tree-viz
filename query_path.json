@@ -1,0 +1,24 @@
+{
+  "user_query": "what is the total number of requisitions that have been opened this year",
+  "explore": "requisitions",
+  "family_key": "req_count_and_search",
+  "family_description": "Count or find requisitions \u2014 by creator, supplier, date period, amount threshold, commodity, status keyword. Covers 'how many reqs did i create', 'how many reqs for supplier X', 'how many prs over 1M', 'reqs submitted for diverse suppliers', 'requisitions under a commodity', 'show me reqs created for amazon eu spain'.",
+  "dimensions": [],
+  "measures": [
+    "requisitions.count_requisition_header_id"
+  ],
+  "filters": {
+    "requisitions.req_header_created_date": "this year"
+  },
+  "sorts": [],
+  "looker_query": {
+    "fields": [
+      "requisitions.count_requisition_header_id"
+    ],
+    "filters": {
+      "requisitions.req_header_created_date": "this year"
+    },
+    "sorts": []
+  },
+  "timestamp": "2026-03-21T15:09:55.206858"
+}

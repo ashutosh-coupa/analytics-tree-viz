@@ -1,24 +1,31 @@
 {
-  "user_query": "what is the total number of requisitions that have been opened this year",
-  "explore": "requisitions",
-  "family_key": "req_count_and_search",
-  "family_description": "Count or find requisitions \u2014 by creator, supplier, date period, amount threshold, commodity, status keyword. Covers 'how many reqs did i create', 'how many reqs for supplier X', 'how many prs over 1M', 'reqs submitted for diverse suppliers', 'requisitions under a commodity', 'show me reqs created for amazon eu spain'.",
-  "dimensions": [],
+  "user_query": "how many invoices are there with suppliers polydono and approver mac master",
+  "explore": "invoices",
+  "family_key": "invoice_count_and_status",
+  "family_description": "Count invoices or check invoice volume \u2014 by supplier, creator, date, PO number, amount threshold, channel, or status. Covers 'how many invoices from supplier X', 'how many invoices created this month', 'how many invoices for PO 1696', 'total number of invoices', 'how many open/new invoices', 'aged invoices', 'invoices created via CSP', 'status distribution'.",
+  "dimensions": [
+    "suppliers.name",
+    "invoices.invoice_header_id"
+  ],
   "measures": [
-    "requisitions.count_requisition_header_id"
+    "invoices.count_invoice_header_id"
   ],
   "filters": {
-    "requisitions.req_header_created_date": "this year"
+    "suppliers.name": "%polydono%",
+    "approver_name": "%mac master%"
   },
   "sorts": [],
   "looker_query": {
     "fields": [
-      "requisitions.count_requisition_header_id"
+      "suppliers.name",
+      "invoices.invoice_header_id",
+      "invoices.count_invoice_header_id"
     ],
     "filters": {
-      "requisitions.req_header_created_date": "this year"
+      "suppliers.name": "%polydono%",
+      "approver_name": "%mac master%"
     },
     "sorts": []
   },
-  "timestamp": "2026-03-21T15:09:55.206858"
+  "timestamp": "2026-03-21T15:14:57.499595"
 }

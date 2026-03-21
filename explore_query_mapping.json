@@ -118,7 +118,8 @@
             { "name": "suppliers.channel", "label": "Supplier Channel", "description": "Filter by supplier channel setting" },
             { "name": "suppliers.supplier_country", "label": "Supplier Country", "description": "Country of the supplier" },
             { "name": "users.id", "label": "User ID", "description": "Filter to a specific user's invoices" },
-            { "name": "users.fullname", "label": "User Full Name", "description": "Filter by user full name" }
+            { "name": "users.fullname", "label": "User Full Name", "description": "Filter by user full name" },
+            { "name": "approvals.actual_approver_name", "label": "Actual Approver Name", "description": "Name of the actual approver" }
           ],
           "available_measures": [
             { "name": "invoices.count_invoice_header_id", "label": "Invoice Count", "description": "Count of distinct invoices" },

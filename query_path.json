@@ -5,25 +5,25 @@
   "family_description": "Count invoices or check invoice volume \u2014 by supplier, creator, date, PO number, amount threshold, channel, or status. Covers 'how many invoices from supplier X', 'how many invoices created this month', 'how many invoices for PO 1696', 'total number of invoices', 'how many open/new invoices', 'aged invoices', 'invoices created via CSP', 'status distribution'.",
   "dimensions": [
     "suppliers.name",
-    "invoices.invoice_header_id"
+    "approvals.actual_approver_name"
   ],
   "measures": [
     "invoices.count_invoice_header_id"
   ],
   "filters": {
     "suppliers.name": "%polydono%",
-    "approver_name": "%mac master%"
+    "approvals.actual_approver_name": "%mac master%"
   },
   "sorts": [],
   "looker_query": {
     "fields": [
       "suppliers.name",
-      "invoices.invoice_header_id",
+      "approvals.actual_approver_name",
       "invoices.count_invoice_header_id"
     ],
     "filters": {
       "suppliers.name": "%polydono%",
-      "approver_name": "%mac master%"
+      "approvals.actual_approver_name": "%mac master%"
     },
     "sorts": []
   },
